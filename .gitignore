@@ -1,0 +1,2 @@
+# ignore individual hyperparameter search trial
+hyperparameter_search/orcai-v1-3750-LSTM_HPS/hps_logs/orcai-v1-3750-LSTM_HPS

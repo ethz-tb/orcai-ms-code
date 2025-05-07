@@ -1,0 +1,12 @@
+{
+    "filters": "set3",
+    "kernel_size": 3,
+    "dropout_rate": 0.5,
+    "batch_size": 64,
+    "lstm_units": 128,
+    "tuner/epochs": 10,
+    "tuner/initial_epoch": 4,
+    "tuner/bracket": 1,
+    "tuner/round": 1,
+    "tuner/trial_id": "0018"
+}

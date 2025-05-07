@@ -1,0 +1,198 @@
+Many modules are hidden in this stack. Use "module --show_hidden spider SOFTWARE" if you are not able to find the required software
+
+running rsync -avz /nfs/nas22/fs2201/usys_ibz_tb_data/TB-data/Daniel_Angst/orcAI/orcai_tvt_data_3750.zip /scratch/tmp.30549114.angstd
+
+sending incremental file list
+orcai_tvt_data_3750.zip
+
+sent 33,226,309,469 bytes  received 35 bytes  51,553,622.19 bytes/sec
+total size is 33,218,790,656  speedup is 1.00
+
+running unzip /scratch/tmp.30549114.angstd/orcai_tvt_data_3750.zip -d /scratch/tmp.30549114.angstd
+
+Archive:  /scratch/tmp.30549114.angstd/orcai_tvt_data_3750.zip
+  inflating: /scratch/tmp.30549114.angstd/val.csv.gz  
+  inflating: /scratch/tmp.30549114.angstd/test.csv.gz  
+  inflating: /scratch/tmp.30549114.angstd/.DS_Store  
+  inflating: /scratch/tmp.30549114.angstd/call_weights.json  
+  inflating: /scratch/tmp.30549114.angstd/all_snippet_stats_duration.csv  
+  inflating: /scratch/tmp.30549114.angstd/selected_snippet_stats_duration.csv  
+   creating: /scratch/tmp.30549114.angstd/val_dataset/
+ extracting: /scratch/tmp.30549114.angstd/val_dataset/snapshot.metadata  
+  inflating: /scratch/tmp.30549114.angstd/val_dataset/dataset_spec.pb  
+   creating: /scratch/tmp.30549114.angstd/val_dataset/16813939042619312513/
+   creating: /scratch/tmp.30549114.angstd/val_dataset/16813939042619312513/00000000.shard/
+  inflating: /scratch/tmp.30549114.angstd/val_dataset/16813939042619312513/00000000.shard/00000000.snapshot  
+   creating: /scratch/tmp.30549114.angstd/train_dataset/
+ extracting: /scratch/tmp.30549114.angstd/train_dataset/snapshot.metadata  
+  inflating: /scratch/tmp.30549114.angstd/train_dataset/dataset_spec.pb  
+   creating: /scratch/tmp.30549114.angstd/train_dataset/15588248514209919321/
+   creating: /scratch/tmp.30549114.angstd/train_dataset/15588248514209919321/00000000.shard/
+  inflating: /scratch/tmp.30549114.angstd/train_dataset/15588248514209919321/00000000.shard/00000000.snapshot  
+   creating: /scratch/tmp.30549114.angstd/test_dataset/
+   creating: /scratch/tmp.30549114.angstd/test_dataset/7262952248879318786/
+   creating: /scratch/tmp.30549114.angstd/test_dataset/7262952248879318786/00000000.shard/
+  inflating: /scratch/tmp.30549114.angstd/test_dataset/7262952248879318786/00000000.shard/00000000.snapshot  
+ extracting: /scratch/tmp.30549114.angstd/test_dataset/snapshot.metadata  
+  inflating: /scratch/tmp.30549114.angstd/test_dataset/dataset_spec.pb  
+  inflating: /scratch/tmp.30549114.angstd/all_snippets.csv.gz  
+  inflating: /scratch/tmp.30549114.angstd/dataset_shapes.json  
+  inflating: /scratch/tmp.30549114.angstd/failed_snippets.csv  
+  inflating: /scratch/tmp.30549114.angstd/train.csv.gz  
+
+running orcai train /scratch/tmp.30549114.angstd /cluster/home/angstd/orcAI/20250428_orcai -p /cluster/home/angstd/orcAI/20250428_orcai/orcai_parameter_1DC_init.json
+
+orcai, version 0.22.1
+🐳 Training model
+orcAI 0.22.1 [started @ 2025-05-01 18:35:50]
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1746117350.835925 3441697 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1746117350.843193 3441697 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1746117350.862409 3441697 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1746117350.862516 3441697 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1746117350.862519 3441697 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1746117350.862521 3441697 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+    Platform: Linux-5.15.0-131-generic-x86_64-with-glibc2.35
+    Python version: 3.11.6 (main, Jun 20 2024, 16:12:48) [GCC 12.2.0]
+    Tensorflow version: 2.19.0
+    Keras version: 3.9.2
+    CUDA version: 12.5.1
+    cuDNN version: 9
+    Available TensorFlow devices: /GPU:0: NVIDIA GeForce RTX 3090
+🐳 Loading parameter [0:00:06]
+    Output directory: /cluster/home/angstd/orcAI/20250428_orcai
+    Data directory: /scratch/tmp.30549114.angstd
+🐳 Loading training and validation datasets from /scratch/tmp.30549114.angstd [0:00:06, 𝚫 0:00:00]
+    Loading dataset shapes from JSON file
+I0000 00:00:1746117356.567635 3441697 gpu_device.cc:2019] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 22335 MB memory:  -> device: 0, name: NVIDIA GeForce RTX 3090, pci bus id: 0000:a1:00.0, compute capability: 8.6
+    Batch size 64
+🐳 Building model [0:00:08, 𝚫 0:00:03]
+🐳 Building model architecture [0:00:10, 𝚫 0:00:01]
+    model name:          orcai-v1-3750-1DC_1
+    model architecture:  ResNet1DConv
+    model input shape:   (None, 736, 171, 1)
+    model output shape:  (None, 46, 7)
+    actual input_shape:  (736, 171, 1)
+    actual output_shape: (46, 7)
+    n_filters:           4
+    num_labels:          7
+🐳 Compiling model: orcai-v1-3750-1DC_1 [0:00:10, 𝚫 0:00:00]
+    Model size:
+        Total parameters: 24999
+        Trainable parameters: 24495
+        Non-trainable parameters: 504
+        memory usage: 1.64 GB
+🐳 Fitting model: orcai-v1-3750-1DC_1 [0:00:10, 𝚫 0:00:00]
+    Monitoring val_MBA
+
+0epoch [00:00, ?epoch/s]
+  0%|          | 0/30 [00:00<?, ?epoch/s]WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1746117368.683711 3441762 service.cc:152] XLA service 0x1501a411cf90 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+I0000 00:00:1746117368.683758 3441762 service.cc:160]   StreamExecutor device (0): NVIDIA GeForce RTX 3090, Compute Capability 8.6
+I0000 00:00:1746117370.481012 3441762 cuda_dnn.cc:529] Loaded cuDNN version 90300
+I0000 00:00:1746117406.576610 3441762 device_compiler.h:188] Compiled cluster using XLA!  This line is logged at most once for the lifetime of the process.
+
+  3%|▎         | 1/30 [09:27<4:34:14, 567.39s/epoch, MBA=0.936, loss=0.178, val_MBA=0.936, val_loss=0.18, learning_rate=0.0001]
+  7%|▋         | 2/30 [18:06<4:11:27, 538.84s/epoch, MBA=0.947, loss=0.144, val_MBA=0.915, val_loss=0.237, learning_rate=0.0001]
+ 10%|█         | 3/30 [28:04<4:14:37, 565.82s/epoch, MBA=0.949, loss=0.135, val_MBA=0.942, val_loss=0.161, learning_rate=0.0001]
+ 13%|█▎        | 4/30 [36:48<3:58:07, 549.51s/epoch, MBA=0.951, loss=0.13, val_MBA=0.945, val_loss=0.151, learning_rate=0.0001] 
+ 17%|█▋        | 5/30 [46:15<3:51:37, 555.89s/epoch, MBA=0.952, loss=0.126, val_MBA=0.947, val_loss=0.147, learning_rate=0.0001]
+ 20%|██        | 6/30 [56:11<3:47:47, 569.50s/epoch, MBA=0.953, loss=0.124, val_MBA=0.944, val_loss=0.157, learning_rate=5e-5]  
+ 23%|██▎       | 7/30 [1:05:32<3:37:13, 566.66s/epoch, MBA=0.953, loss=0.123, val_MBA=0.948, val_loss=0.141, learning_rate=5e-5]
+ 27%|██▋       | 8/30 [1:14:16<3:22:46, 553.02s/epoch, MBA=0.953, loss=0.122, val_MBA=0.947, val_loss=0.142, learning_rate=5e-5]
+ 30%|███       | 9/30 [1:23:00<3:10:22, 543.94s/epoch, MBA=0.954, loss=0.121, val_MBA=0.948, val_loss=0.141, learning_rate=2.5e-5]
+ 33%|███▎      | 10/30 [1:31:38<2:58:41, 536.05s/epoch, MBA=0.954, loss=0.12, val_MBA=0.949, val_loss=0.14, learning_rate=2.5e-5] 
+ 37%|███▋      | 11/30 [1:40:59<2:52:07, 543.57s/epoch, MBA=0.954, loss=0.12, val_MBA=0.948, val_loss=0.141, learning_rate=2.5e-5]
+ 40%|████      | 12/30 [1:50:38<2:46:19, 554.41s/epoch, MBA=0.954, loss=0.12, val_MBA=0.949, val_loss=0.141, learning_rate=1.25e-5]
+ 43%|████▎     | 13/30 [2:00:12<2:38:46, 560.39s/epoch, MBA=0.954, loss=0.119, val_MBA=0.949, val_loss=0.139, learning_rate=1.25e-5]
+ 47%|████▋     | 14/30 [2:09:29<2:29:09, 559.37s/epoch, MBA=0.954, loss=0.119, val_MBA=0.949, val_loss=0.14, learning_rate=1.25e-5] 
+ 50%|█████     | 15/30 [2:18:54<2:20:13, 560.92s/epoch, MBA=0.954, loss=0.119, val_MBA=0.949, val_loss=0.139, learning_rate=6.25e-6]
+ 53%|█████▎    | 16/30 [2:28:13<2:10:46, 560.48s/epoch, MBA=0.954, loss=0.119, val_MBA=0.949, val_loss=0.139, learning_rate=6.25e-6]
+ 57%|█████▋    | 17/30 [2:37:01<1:59:17, 550.56s/epoch, MBA=0.954, loss=0.119, val_MBA=0.949, val_loss=0.139, learning_rate=6.25e-6]
+ 60%|██████    | 18/30 [2:46:59<1:53:00, 565.00s/epoch, MBA=0.954, loss=0.119, val_MBA=0.949, val_loss=0.138, learning_rate=3.12e-6]
+ 63%|██████▎   | 19/30 [2:57:21<1:46:41, 581.94s/epoch, MBA=0.954, loss=0.119, val_MBA=0.949, val_loss=0.138, learning_rate=3.12e-6]
+ 67%|██████▋   | 20/30 [3:07:08<1:37:14, 583.43s/epoch, MBA=0.954, loss=0.119, val_MBA=0.949, val_loss=0.14, learning_rate=3.12e-6] 
+ 70%|███████   | 21/30 [3:16:34<1:26:44, 578.33s/epoch, MBA=0.954, loss=0.119, val_MBA=0.949, val_loss=0.14, learning_rate=1.56e-6]
+ 73%|███████▎  | 22/30 [3:26:16<1:17:14, 579.35s/epoch, MBA=0.954, loss=0.118, val_MBA=0.949, val_loss=0.139, learning_rate=1.56e-6]
+ 77%|███████▋  | 23/30 [3:35:40<1:07:04, 574.93s/epoch, MBA=0.954, loss=0.118, val_MBA=0.949, val_loss=0.14, learning_rate=1.56e-6] 
+ 80%|████████  | 24/30 [3:45:26<57:49, 578.18s/epoch, MBA=0.954, loss=0.119, val_MBA=0.949, val_loss=0.139, learning_rate=7.81e-7] 
+ 80%|████████  | 24/30 [3:45:26<56:21, 563.61s/epoch, MBA=0.954, loss=0.119, val_MBA=0.949, val_loss=0.139, learning_rate=7.81e-7]
+🐳 Saving Model [3:46:10, 𝚫 3:46:00]
+🐳 Training model finished. Model saved to orcai-v1-3750-1DC_1.keras [3:46:10, 𝚫 0:00:00]
+
+running orcai test /cluster/home/angstd/orcAI/20250428_orcai/orcai-v1-3750-1DC_1 /scratch/tmp.30549114.angstd
+
+🐳 Testing model orcai-v1-3750-1DC_1
+orcAI 0.22.1 [started @ 2025-05-01 22:22:03]
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1746130924.975843 3721982 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1746130924.982370 3721982 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1746130925.017762 3721982 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1746130925.017814 3721982 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1746130925.017819 3721982 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1746130925.017822 3721982 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+🐳 Loading model [0:00:08]
+    Model directory: /cluster/home/angstd/orcAI/20250428_orcai/orcai-v1-3750-1DC_1
+    Model data directory: /scratch/tmp.30549114.angstd
+I0000 00:00:1746130932.019136 3721982 gpu_device.cc:2019] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 22335 MB memory:  -> device: 0, name: NVIDIA GeForce RTX 3090, pci bus id: 0000:a1:00.0, compute capability: 8.6
+Traceback (most recent call last):
+  File "/cluster/home/angstd/orcAI/venv/bin/orcai", line 8, in <module>
+    sys.exit(cli())
+             ^^^^^
+  File "/cluster/home/angstd/orcAI/venv/lib/python3.11/site-packages/rich_click/rich_command.py", line 378, in __call__
+    return super().__call__(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/angstd/orcAI/venv/lib/python3.11/site-packages/click/core.py", line 1161, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/angstd/orcAI/venv/lib/python3.11/site-packages/rich_click/rich_command.py", line 166, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/cluster/home/angstd/orcAI/venv/lib/python3.11/site-packages/click/core.py", line 1697, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/angstd/orcAI/venv/lib/python3.11/site-packages/click/core.py", line 1443, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/angstd/orcAI/venv/lib/python3.11/site-packages/click/core.py", line 788, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/angstd/orcAI/venv/lib/python3.11/site-packages/orcAI/cli.py", line 701, in cli_test
+    test_model(**kwargs)
+  File "/cluster/home/angstd/orcAI/venv/lib/python3.11/site-packages/orcAI/test.py", line 360, in test_model
+    model, orcai_parameter, _ = load_orcai_model(model_dir)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/angstd/orcAI/venv/lib/python3.11/site-packages/orcAI/io.py", line 265, in load_orcai_model
+    model = keras.saving.load_model(
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/angstd/orcAI/venv/lib/python3.11/site-packages/keras/src/saving/saving_api.py", line 189, in load_model
+    return saving_lib.load_model(
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/angstd/orcAI/venv/lib/python3.11/site-packages/keras/src/saving/saving_lib.py", line 367, in load_model
+    return _load_model_from_fileobj(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/angstd/orcAI/venv/lib/python3.11/site-packages/keras/src/saving/saving_lib.py", line 444, in _load_model_from_fileobj
+    model = _model_from_config(
+            ^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/angstd/orcAI/venv/lib/python3.11/site-packages/keras/src/saving/saving_lib.py", line 433, in _model_from_config
+    model = deserialize_keras_object(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/angstd/orcAI/venv/lib/python3.11/site-packages/keras/src/saving/serialization_lib.py", line 718, in deserialize_keras_object
+    instance = cls.from_config(inner_config)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/angstd/orcAI/venv/lib/python3.11/site-packages/keras/src/models/model.py", line 587, in from_config
+    return functional_from_config(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/angstd/orcAI/venv/lib/python3.11/site-packages/keras/src/models/functional.py", line 557, in functional_from_config
+    process_layer(layer_data)
+  File "/cluster/home/angstd/orcAI/venv/lib/python3.11/site-packages/keras/src/models/functional.py", line 524, in process_layer
+    layer = serialization_lib.deserialize_keras_object(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/angstd/orcAI/venv/lib/python3.11/site-packages/keras/src/saving/serialization_lib.py", line 718, in deserialize_keras_object
+    instance = cls.from_config(inner_config)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/cluster/home/angstd/orcAI/venv/lib/python3.11/site-packages/keras/src/layers/core/lambda_layer.py", line 190, in from_config
+    cls._raise_for_lambda_deserialization("function", safe_mode)
+  File "/cluster/home/angstd/orcAI/venv/lib/python3.11/site-packages/keras/src/layers/core/lambda_layer.py", line 172, in _raise_for_lambda_deserialization
+    raise ValueError(
+ValueError: The `{arg_name}` of this `Lambda` layer is a Python lambda. Deserializing it is unsafe. If you trust the source of the config artifact, you can override this error by passing `safe_mode=False` to `from_config()`, or calling `keras.config.enable_unsafe_deserialization().

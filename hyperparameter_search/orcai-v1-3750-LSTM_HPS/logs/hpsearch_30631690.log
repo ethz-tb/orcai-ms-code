@@ -1,0 +1,81 @@
+Many modules are hidden in this stack. Use "module --show_hidden spider SOFTWARE" if you are not able to find the required software
+
+running rsync -avz /nfs/nas22/fs2201/usys_ibz_tb_data/TB-data/Daniel_Angst/orcAI/orcai_tvt_data_3750.zip /scratch/tmp.30631690.angstd
+
+sending incremental file list
+orcai_tvt_data_3750.zip
+
+sent 33,226,309,469 bytes  received 35 bytes  64,205,428.99 bytes/sec
+total size is 33,218,790,656  speedup is 1.00
+
+running unzip /scratch/tmp.30631690.angstd/orcai_tvt_data_3750.zip -d /scratch/tmp.30631690.angstd
+
+Archive:  /scratch/tmp.30631690.angstd/orcai_tvt_data_3750.zip
+  inflating: /scratch/tmp.30631690.angstd/val.csv.gz  
+  inflating: /scratch/tmp.30631690.angstd/test.csv.gz  
+  inflating: /scratch/tmp.30631690.angstd/.DS_Store  
+  inflating: /scratch/tmp.30631690.angstd/call_weights.json  
+  inflating: /scratch/tmp.30631690.angstd/all_snippet_stats_duration.csv  
+  inflating: /scratch/tmp.30631690.angstd/selected_snippet_stats_duration.csv  
+   creating: /scratch/tmp.30631690.angstd/val_dataset/
+ extracting: /scratch/tmp.30631690.angstd/val_dataset/snapshot.metadata  
+  inflating: /scratch/tmp.30631690.angstd/val_dataset/dataset_spec.pb  
+   creating: /scratch/tmp.30631690.angstd/val_dataset/16813939042619312513/
+   creating: /scratch/tmp.30631690.angstd/val_dataset/16813939042619312513/00000000.shard/
+  inflating: /scratch/tmp.30631690.angstd/val_dataset/16813939042619312513/00000000.shard/00000000.snapshot  
+   creating: /scratch/tmp.30631690.angstd/train_dataset/
+ extracting: /scratch/tmp.30631690.angstd/train_dataset/snapshot.metadata  
+  inflating: /scratch/tmp.30631690.angstd/train_dataset/dataset_spec.pb  
+   creating: /scratch/tmp.30631690.angstd/train_dataset/15588248514209919321/
+   creating: /scratch/tmp.30631690.angstd/train_dataset/15588248514209919321/00000000.shard/
+  inflating: /scratch/tmp.30631690.angstd/train_dataset/15588248514209919321/00000000.shard/00000000.snapshot  
+   creating: /scratch/tmp.30631690.angstd/test_dataset/
+   creating: /scratch/tmp.30631690.angstd/test_dataset/7262952248879318786/
+   creating: /scratch/tmp.30631690.angstd/test_dataset/7262952248879318786/00000000.shard/
+  inflating: /scratch/tmp.30631690.angstd/test_dataset/7262952248879318786/00000000.shard/00000000.snapshot  
+ extracting: /scratch/tmp.30631690.angstd/test_dataset/snapshot.metadata  
+  inflating: /scratch/tmp.30631690.angstd/test_dataset/dataset_spec.pb  
+  inflating: /scratch/tmp.30631690.angstd/all_snippets.csv.gz  
+  inflating: /scratch/tmp.30631690.angstd/dataset_shapes.json  
+  inflating: /scratch/tmp.30631690.angstd/failed_snippets.csv  
+  inflating: /scratch/tmp.30631690.angstd/train.csv.gz  
+
+running orcai hpsearch /scratch/tmp.30631690.angstd /cluster/home/angstd/orcAI/20250428_orcai -p /cluster/home/angstd/orcAI/20250428_orcai/orcai_parameter_HPS.json -hp /cluster/home/angstd/orcAI/20250428_orcai/hps_parameter.json -pl
+
+orcai, version 0.22.1
+🐳 Hyperparameter search
+orcAI 0.22.1 [started @ 2025-05-02 10:53:12]
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1746175993.820539  322561 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1746175993.827003  322561 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1746175993.848934  322561 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1746175993.848983  322561 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1746175993.848988  322561 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1746175993.848992  322561 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+🐳 Loading Hyperparameter search parameter [0:00:28]
+🐳 Loading training and validation datasets from /scratch/tmp.30631690.angstd [0:00:28, 𝚫 0:00:00]
+I0000 00:00:1746176023.107064  322561 gpu_device.cc:2019] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 22807 MB memory:  -> device: 0, name: Quadro RTX 6000, pci bus id: 0000:01:00.0, compute capability: 7.5
+I0000 00:00:1746176023.112165  322561 gpu_device.cc:2019] Created device /job:localhost/replica:0/task:0/device:GPU:1 with 22807 MB memory:  -> device: 1, name: Quadro RTX 6000, pci bus id: 0000:21:00.0, compute capability: 7.5
+I0000 00:00:1746176023.113749  322561 gpu_device.cc:2019] Created device /job:localhost/replica:0/task:0/device:GPU:2 with 22807 MB memory:  -> device: 2, name: Quadro RTX 6000, pci bus id: 0000:22:00.0, compute capability: 7.5
+I0000 00:00:1746176023.115533  322561 gpu_device.cc:2019] Created device /job:localhost/replica:0/task:0/device:GPU:3 with 22807 MB memory:  -> device: 3, name: Quadro RTX 6000, pci bus id: 0000:81:00.0, compute capability: 7.5
+🐳 Searching hyperparameters [0:00:34, 𝚫 0:00:07]
+    Parallel - running on 4 GPU
+Reloading Tuner from /cluster/home/angstd/orcAI/20250428_orcai/hps_logs/orcai-v1-3750-LSTM_HPS/tuner0.json
+    Saving best model to hps/orcai-v1-3750-LSTM_HPS.keras
+I0000 00:00:1746176045.407298  322656 cuda_dnn.cc:529] Loaded cuDNN version 90300
+/cluster/home/angstd/orcAI/venv/lib/python3.11/site-packages/keras/src/saving/saving_lib.py:757: UserWarning: Skipping variable loading for optimizer 'adam', because it has 2 variables whereas the saved optimizer has 152 variables. 
+  saveable.load_own_variables(weights_store.get(inner_path))
+🐳 Best Hyperparameters [2 days, 10:29:01, 𝚫 2 days, 10:28:27]
+    {
+        "filters": "set3",
+        "kernel_size": 3,
+        "dropout_rate": 0.5,
+        "batch_size": 64,
+        "lstm_units": 128,
+        "tuner/epochs": 10,
+        "tuner/initial_epoch": 4,
+        "tuner/bracket": 1,
+        "tuner/round": 1,
+        "tuner/trial_id": "0018"
+    }
+🐳 Hyperparameter search completed [2 days, 10:29:01, 𝚫 0:00:00]
