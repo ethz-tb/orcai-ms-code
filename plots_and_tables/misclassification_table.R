@@ -83,7 +83,7 @@ sampled_data_TP |>
             "S: pulsed calls",
             "TS: tail slaps",
             "WH: whistle",
-            "NONE: no calls annotated (top) / predicted(bottom)",
+            "NONE: no calls annotated (top) / predicted (bottom)",
             .sep = "; "
         ),
         general_title = "Abbreviations:",
