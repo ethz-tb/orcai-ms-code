@@ -2,6 +2,7 @@ library(tidyverse)
 library(knitr)
 library(kableExtra)
 library(here)
+library(glue)
 
 test_sampled_data_mc_table_paths <- tibble(
     dataset = "all",
@@ -74,6 +75,21 @@ sampled_data_TP |>
     ) |>
     add_header_above(c(" " = 2, "predicted" = 8, " " = 1)) %>%
     collapse_rows(1, latex_hline = "none") |>
+    footnote(
+        general = glue(
+            "BR: breathing",
+            "BUZZ: buzzing",
+            "HERD: herding calls",
+            "S: pulsed calls",
+            "TS: tail slaps",
+            "WH: whistle",
+            "NONE: no calls annotated (top) / predicted(bottom)",
+            .sep = "; "
+        ),
+        general_title = "Abbreviations:",
+        title_format = c("italic"),
+        footnote_as_chunk = TRUE
+    ) |>
     write_lines(file = here("plots_and_tables", "output", "mc_table_TP.tex"))
 
 sampled_data_PT |>
