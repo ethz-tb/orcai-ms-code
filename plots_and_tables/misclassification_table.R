@@ -6,12 +6,15 @@ library(here)
 test_sampled_data_mc_table_paths <- tibble(
     dataset = "all",
     path = c(
-        here("orcai", "orcai-v1", "test", "test_sampled_data_misclassification_table_pred_true.csv")
+        here("trained_models", "orcai-v1", "test", "test_sampled_data_misclassification_table_pred_true.csv")
     )
 )
 
 
-sampled_data_TP <- here("orcai", "orcai-v1", "test", "test_sampled_data_misclassification_table_true_pred.csv") |>
+sampled_data_TP <- here(
+    "trained_models", "orcai-v1", "test",
+    "test_sampled_data_misclassification_table_true_pred.csv"
+) |>
     read_csv(
         col_types = cols(Label = col_character(), .default = col_double())
     ) |>
@@ -35,7 +38,10 @@ sampled_data_TP <- here("orcai", "orcai-v1", "test", "test_sampled_data_misclass
             .default = Label
         ),
     )
-sampled_data_PT <- here("orcai", "orcai-v1", "test", "test_sampled_data_misclassification_table_pred_true.csv") |>
+sampled_data_PT <- here(
+    "trained_models", "orcai-v1", "test",
+    "test_sampled_data_misclassification_table_pred_true.csv"
+) |>
     read_csv(
         col_types = cols(Label = col_character(), .default = col_double())
     ) |>
@@ -68,7 +74,7 @@ sampled_data_TP |>
     ) |>
     add_header_above(c(" " = 2, "predicted" = 8, " " = 1)) %>%
     collapse_rows(1, latex_hline = "none") |>
-    write_lines(file = here("orcai", "mc_table_TP.tex"))
+    write_lines(file = here("plots_and_tables", "output", "mc_table_TP.tex"))
 
 sampled_data_PT |>
     kbl(
@@ -77,4 +83,4 @@ sampled_data_PT |>
     ) |>
     add_header_above(c(" " = 2, "true" = 8, " " = 1)) %>%
     collapse_rows(1, latex_hline = "none") |>
-    write_lines(file = here("orcai", "mc_table_PT.tex"))
+    write_lines(file = here("plots_and_tables", "output", "mc_table_PT.tex"))

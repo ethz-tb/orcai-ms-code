@@ -4,7 +4,7 @@ library(kableExtra)
 library(here)
 
 test_data_confusion <- read_csv(
-    file = here("orcai", "orcai-v1", "test", "test_data_confusion_table.csv"),
+    file = here("trained_models", "orcai-v1", "test", "test_data_confusion_table.csv"),
     col_types = cols(
         Label = col_character(),
         TP = col_double(),
@@ -21,7 +21,7 @@ test_data_confusion <- read_csv(
     arrange(Label)
 
 unfiltered_data_confusion <- read_csv(
-    file = here("orcai", "orcai-v1", "test", "test_sampled_data_confusion_table.csv"),
+    file = here("trained_models", "orcai-v1", "test", "test_sampled_data_confusion_table.csv"),
     col_types = cols(
         Label = col_character(),
         TP = col_double(),
@@ -58,4 +58,4 @@ kbl(confusion_table,
 ) |>
     pack_rows("select", 1, 7) |>
     pack_rows("all", 8, 14) |>
-    write_lines(file = here("orcai", "confusion_table.tex"))
+    write_lines(file = here("plots_and_tables", "output", "confusion_table.tex"))

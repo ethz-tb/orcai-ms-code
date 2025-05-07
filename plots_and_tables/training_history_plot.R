@@ -4,8 +4,9 @@ library(jsonlite)
 library(patchwork)
 
 model_paths <- c(
-    here("orcai-v1-3750-LSTM_1"),
-    here("orcai-v1-3750-1DC_1")
+    here("trained_models", "orcai-v1"),
+    here("trained_models", "orcai-v1-3750-LSTM_1"),
+    here("trained_models", "orcai-v1-3750-1DC_1")
 )
 
 model_data_list <- list()
@@ -49,9 +50,6 @@ plot_data <- left_join(model_data_training, model_data_validation,
 ) |>
     pivot_longer(training:validation, names_to = "type")
 
-unique(plot_data$architecture)
-range(plot_data$epoch)
-
 arch_colors <- c(
     "ResNetLSTM" = rgb(32, 119, 180, maxColorValue = 255),
     "ResNet1DConv" = rgb(255, 127, 15, maxColorValue = 255)
@@ -68,7 +66,7 @@ common_theme <- theme_bw() + theme(
 )
 
 plot_loss <- plot_data |>
-    filter(name == "loss") |>
+    filter(model != "orcai-v1", name == "loss") |>
     ggplot(
         mapping = aes(x = epoch, y = value, colour = architecture, linetype = type)
     ) +
@@ -85,7 +83,7 @@ plot_loss <- plot_data |>
     theme(legend.position = "inside", legend.position.inside = c(0.95, 0.95), legend.justification = c(1, 1))
 
 plot_MBA <- plot_data |>
-    filter(name == "MBA") |>
+    filter(model != "orcai-v1", name == "MBA") |>
     ggplot(
         mapping = aes(x = epoch, y = value, colour = architecture, linetype = type)
     ) +
@@ -102,7 +100,7 @@ plot_MBA <- plot_data |>
     theme(legend.position = "none")
 
 plot_LR <- plot_data |>
-    filter(name == "learning_rate", type == "training") |>
+    filter(model != "orcai-v1", name == "learning_rate", type == "training") |>
     ggplot(
         mapping = aes(x = epoch, y = value, colour = architecture)
     ) +
@@ -122,7 +120,77 @@ plot <- plot_loss + plot_MBA + plot_LR +
 
 
 ggsave(
-    here("/Volumes/4TB/orcai_project/orcai/training_history.pdf"),
+    here("plots_and_tables", "output", "training_history.pdf"),
+    width = 183,
+    height = 80,
+    unit = "mm"
+)
+
+unique(plot_data$model)
+
+model_colors <- c(
+    "orcai-v1" = rgb(34, 160, 43, maxColorValue = 255),
+    "orcai-v1-3750-LSTM_1" = rgb(32, 119, 180, maxColorValue = 255),
+    "orcai-v1-3750-1DC_1" = rgb(255, 127, 15, maxColorValue = 255)
+)
+
+
+plot_loss <- plot_data |>
+    filter(name == "loss") |>
+    ggplot(
+        mapping = aes(x = epoch, y = value, colour = model, linetype = type)
+    ) +
+    geom_line() +
+    labs(
+        y = "Loss (Masked Binary Crossentropy)",
+        x = "Epoch"
+    ) +
+    scale_linetype_manual(values = type_lines, name = "", guide = guide_legend(order = 2)) +
+    scale_colour_manual(values = model_colors, name = "", guide = guide_legend(order = 1)) +
+    scale_x_continuous(limits = c(0, 30), breaks = seq(0, 30, 5)) +
+    scale_y_continuous(limits = c(0, 0.7), breaks = seq(0, 0.7, 0.1)) +
+    common_theme +
+    theme(legend.position = "inside", legend.position.inside = c(0.95, 0.95), legend.justification = c(1, 1))
+
+plot_MBA <- plot_data |>
+    filter(name == "MBA") |>
+    ggplot(
+        mapping = aes(x = epoch, y = value, colour = model, linetype = type)
+    ) +
+    scale_colour_manual(values = model_colors, name = "") +
+    scale_linetype_manual(values = type_lines, name = "") +
+    scale_x_continuous(limits = c(0, 30), breaks = seq(0, 30, 5)) +
+    scale_y_continuous(limits = c(0.91, 0.98), breaks = seq(0.91, 0.98, 0.01)) +
+    geom_line() +
+    labs(
+        y = "Masked Binary Accuracy",
+        x = "Epoch"
+    ) +
+    common_theme +
+    theme(legend.position = "none")
+
+plot_LR <- plot_data |>
+    filter(name == "learning_rate", type == "training") |>
+    ggplot(
+        mapping = aes(x = epoch, y = value, colour = model)
+    ) +
+    scale_colour_manual(values = model_colors, name = "") +
+    scale_x_continuous(limits = c(0, 30), breaks = seq(0, 30, 5)) +
+    scale_y_continuous(limits = c(0, 1e-4)) +
+    geom_line() +
+    labs(
+        y = "Learning Rate",
+        x = "Epoch"
+    ) +
+    common_theme +
+    theme(legend.position = "none")
+
+plot <- plot_loss + plot_MBA + plot_LR +
+    plot_annotation(tag_levels = "A")
+
+
+ggsave(
+    here("plots_and_tables", "output", "training_history_all.pdf"),
     width = 183,
     height = 80,
     unit = "mm"

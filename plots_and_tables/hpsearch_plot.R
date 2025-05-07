@@ -3,10 +3,10 @@ library(here)
 library(jsonlite)
 library(patchwork)
 
-hps_parameter <- read_json(here("orcai", "hps_parameter.json"))
+hps_parameter <- read_json(here("input_parameter", "hps_parameter.json"))
 
 trial_data <- read_csv(
-    file = here("orcai", "orcai-v1-3750-LSTM_HPS", "hps_logs", "all_trials.csv"),
+    file = here("hyperparameter_search", "orcai-v1-3750-LSTM_HPS", "hps_logs", "all_trials.csv"),
     col_types = cols(
         filters = col_character(),
         kernel_size = col_double(),
@@ -99,7 +99,7 @@ hpsearch_plot <- filters_plot +
     plot_annotation(tag_levels = "A")
 
 ggsave(
-    here("/Volumes/4TB/orcai_project/orcai/hpsearch_plot.pdf"),
+    here("plots_and_tables", "output", "hpsearch_plot.pdf"),
     width = 183,
     height = 60,
     unit = "mm",

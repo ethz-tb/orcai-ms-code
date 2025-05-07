@@ -3,8 +3,8 @@ library(here)
 library(jsonlite)
 
 model_paths <- c(
-    here("orcai", "orcai-v1-3750-LSTM_1"),
-    here("orcai", "orcai-v1-3750-1DC_1")
+    here("trained_models", "orcai-v1-3750-LSTM_1"),
+    here("trained_models", "orcai-v1-3750-1DC_1")
 )
 
 training_data_list <- list()
@@ -34,5 +34,6 @@ training_data <- bind_rows(training_data_list)
 training_data |>
     group_by(model, architecture) |>
     summarize(
-        across(ends_with("_time"), ~ mean(.x, na.rm = TRUE))
+        across(ends_with("_time"), ~ mean(.x, na.rm = TRUE)),
+        .groups = "keep"
     )
