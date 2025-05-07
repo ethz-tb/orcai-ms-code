@@ -1,0 +1,32 @@
+\begin{tabular}[t]{llrrrrrrrrr}
+\toprule
+\multicolumn{2}{c}{ } & \multicolumn{8}{c}{predicted} & \multicolumn{1}{c}{ } \\
+\cmidrule(l{3pt}r{3pt}){3-10}
+  & Label & BR & BUZZ & HERD & PHS & SS & TS & WH & NONE & fraction time\\
+\midrule
+ & BR & 0.897 & 0.000 & 0.000 & 0.000 & 0.002 & 0.000 & 0.000 & 0.101 & 0.0010\\
+ & BUZZ & 0.000 & 0.477 & 0.002 & 0.000 & 0.017 & 0.003 & 0.002 & 0.500 & 0.0020\\
+ & HERD & 0.000 & 0.000 & 0.568 & 0.000 & 0.083 & 0.000 & 0.000 & 0.348 & 0.0008\\
+ & PHS & 0.000 & 0.035 & 0.000 & 0.053 & 0.002 & 0.001 & 0.000 & 0.908 & 0.0001\\
+ & SS & 0.000 & 0.005 & 0.002 & 0.000 & 0.762 & 0.000 & 0.001 & 0.231 & 0.0310\\
+ & TS & 0.000 & 0.163 & 0.001 & 0.001 & 0.008 & 0.336 & 0.001 & 0.489 & 0.0004\\
+ & WH & 0.000 & 0.000 & 0.000 & 0.000 & 0.085 & 0.000 & 0.104 & 0.811 & 0.0001\\
+\multirow{-8}{*}{\rotatebox[origin=c]{90}{true}} & NONE & 0.011 & 0.021 & 0.002 & 0.001 & 0.023 & 0.000 & 0.002 & 0.940 & 0.9646\\
+\bottomrule
+\toprule
+\multicolumn{2}{c}{ } & \multicolumn{8}{c}{true} & \multicolumn{1}{c}{ } \\
+\cmidrule(l{3pt}r{3pt}){3-10}
+  & Label & BR & BUZZ & HERD & PHS & SS & TS & WH & NONE & fraction time\\
+\midrule
+ & BR & 0.879 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.121 & 0.0011\\
+ & BUZZ & 0.000 & 0.257 & 0.000 & 0.002 & 0.012 & 0.005 & 0.000 & 0.723 & 0.0040\\
+ & HERD & 0.000 & 0.004 & 0.503 & 0.000 & 0.016 & 0.000 & 0.000 & 0.477 & 0.0009\\
+ & PHS & 0.000 & 0.000 & 0.000 & 0.034 & 0.000 & 0.001 & 0.000 & 0.966 & 0.0002\\
+ & SS & 0.000 & 0.001 & 0.002 & 0.000 & 0.523 & 0.000 & 0.001 & 0.474 & 0.0468\\
+ & TS & 0.000 & 0.039 & 0.000 & 0.001 & 0.000 & 0.779 & 0.000 & 0.181 & 0.0001\\
+ & WH & 0.000 & 0.000 & 0.000 & 0.000 & 0.060 & 0.000 & 0.211 & 0.728 & 0.0001\\
+\multirow{-8}{*}{\rotatebox[origin=c]{90}{predicted}} & NONE & 0.000 & 0.001 & 0.000 & 0.000 & 0.008 & 0.000 & 0.000 & 0.990 & 0.9469\\
+\bottomrule
+\multicolumn{11}{l}{\rule{0pt}{1em}\textit{Abbreviations:} BR: breathing; BUZZ: buzzing; HERD: herding calls; S: pulsed calls; }\\
+\multicolumn{11}{l}{TS: tail slaps;WH: whistle;NONE: no calls annotated (top) / predicted (bottom)}\\
+\end{tabular}

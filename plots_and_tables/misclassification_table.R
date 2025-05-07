@@ -68,31 +68,16 @@ sampled_data_PT <- here(
         ` ` = "predicted"
     )
 
-sampled_data_TP |>
+TP_table <- sampled_data_TP |>
     kbl(
         format = "latex", digits = 4,
         booktabs = TRUE
     ) |>
     add_header_above(c(" " = 2, "predicted" = 8, " " = 1)) %>%
     collapse_rows(1, latex_hline = "none") |>
-    footnote(
-        general = glue(
-            "BR: breathing",
-            "BUZZ: buzzing",
-            "HERD: herding calls",
-            "S: pulsed calls",
-            "TS: tail slaps",
-            "WH: whistle",
-            "NONE: no calls annotated (top) / predicted (bottom)",
-            .sep = "; "
-        ),
-        general_title = "Abbreviations:",
-        title_format = c("italic"),
-        footnote_as_chunk = TRUE
-    ) |>
     write_lines(file = here("plots_and_tables", "output", "mc_table_TP.tex"))
 
-sampled_data_PT |>
+PT_table <- sampled_data_PT |>
     kbl(
         format = "latex", digits = 4,
         booktabs = TRUE
@@ -100,3 +85,46 @@ sampled_data_PT |>
     add_header_above(c(" " = 2, "true" = 8, " " = 1)) %>%
     collapse_rows(1, latex_hline = "none") |>
     write_lines(file = here("plots_and_tables", "output", "mc_table_PT.tex"))
+
+# combine tables
+
+TP_table_str <- TP_table |>
+    toString() |>
+    str_replace(
+        "\\\\raggedright\\\\arraybackslash true",
+        "\\\\rotatebox[origin=c]{90}{true}"
+    ) |>
+    str_split(pattern = "(\n)+")
+PT_table_str <- PT_table |>
+    toString() |>
+    str_replace(
+        "\\\\raggedright\\\\arraybackslash predicted",
+        "\\\\rotatebox[origin=c]{90}{predicted}"
+    ) |>
+    str_split(pattern = "(\n)+")
+
+TP_PT_table_footnote_1 <- paste0(
+    "\\multicolumn{11}{l}{\\rule{0pt}{1em}\\textit{Abbreviations:} ",
+    "BR: breathing; ",
+    "BUZZ: buzzing; ",
+    "HERD: herding calls; ",
+    "S: pulsed calls;",
+    "}\\\\"
+)
+
+TP_PT_table_footnote_2 <- paste0(
+    "\\multicolumn{11}{l}{",
+    "TS: tail slaps; ",
+    "WH: whistle; ",
+    "NONE: no calls annotated (top) / predicted (bottom)",
+    "}\\\\"
+)
+
+TP_PT_table <- c(
+    TP_table_str[[1]][2:16],
+    PT_table_str[[1]][3:16],
+    TP_PT_table_footnote_1,
+    TP_PT_table_footnote_2,
+    PT_table_str[[1]][17]
+) |>
+    write_lines(file = here("plots_and_tables", "output", "mc_table_TP_PT.tex"))
