@@ -50,7 +50,9 @@ confusion_table <- bind_rows(test_data_confusion, unfiltered_data_confusion) |>
             "TAILSLAP" ~ "tail slaps",
             "WHISTLE" ~ "whistles"
         )
-    )
+    ) |>
+    # make sure column order is correct
+    select(Label, TP, FN, FP, TN, PR, RE, F1)
 
 kbl(confusion_table,
     format = "latex", digits = 4,
