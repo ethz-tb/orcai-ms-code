@@ -5,4 +5,4 @@
 hyperparameter_search/orcai-v1-3750-LSTM_HPS/hps_logs/orcai-v1-3750-LSTM_HPS
 
 # ignore output files
-plots_and_tables/output
+analysis_scripts/output
