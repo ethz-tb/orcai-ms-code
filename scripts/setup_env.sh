@@ -5,5 +5,5 @@ export CUDA_DIR=$CUDA_EULER_ROOT
 python -m venv venv
 source venv/bin/activate
 
-pip install -U git+https://gitlab.ethz.ch/tb/orcai.git
+pip install -U git+https://github.com/ethz-tb/orcAI.git
 orcai --version

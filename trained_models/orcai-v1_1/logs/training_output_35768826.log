@@ -1,0 +1,195 @@
+Many modules are hidden in this stack. Use "module --show_hidden spider SOFTWARE" if you are not able to find the required software
+
+running rsync -avz /nfs/nas22/fs2201/usys_ibz_tb_data/TB-data/Daniel_Angst/orcAI/orcai_tvt_data_3750.zip /scratch/tmp.35768826.angstd
+
+sending incremental file list
+orcai_tvt_data_3750.zip
+
+sent 56,723,774,794 bytes  received 35 bytes  227,349,798.91 bytes/sec
+total size is 56,710,939,801  speedup is 1.00
+
+running unzip /scratch/tmp.35768826.angstd/orcai_tvt_data_3750.zip -d /scratch/tmp.35768826.angstd
+
+Archive:  /scratch/tmp.35768826.angstd/orcai_tvt_data_3750.zip
+  inflating: /scratch/tmp.35768826.angstd/val.csv.gz  
+  inflating: /scratch/tmp.35768826.angstd/test.csv.gz  
+  inflating: /scratch/tmp.35768826.angstd/.DS_Store  
+  inflating: /scratch/tmp.35768826.angstd/call_weights.json  
+  inflating: /scratch/tmp.35768826.angstd/all_snippet_stats_duration.csv  
+  inflating: /scratch/tmp.35768826.angstd/selected_snippet_stats_duration.csv  
+   creating: /scratch/tmp.35768826.angstd/val_dataset/
+ extracting: /scratch/tmp.35768826.angstd/val_dataset/snapshot.metadata  
+  inflating: /scratch/tmp.35768826.angstd/val_dataset/dataset_spec.pb  
+   creating: /scratch/tmp.35768826.angstd/val_dataset/16813939042619312513/
+   creating: /scratch/tmp.35768826.angstd/val_dataset/16813939042619312513/00000000.shard/
+  inflating: /scratch/tmp.35768826.angstd/val_dataset/16813939042619312513/00000000.shard/00000000.snapshot  
+   creating: /scratch/tmp.35768826.angstd/train_dataset/
+ extracting: /scratch/tmp.35768826.angstd/train_dataset/snapshot.metadata  
+  inflating: /scratch/tmp.35768826.angstd/train_dataset/dataset_spec.pb  
+   creating: /scratch/tmp.35768826.angstd/train_dataset/15588248514209919321/
+   creating: /scratch/tmp.35768826.angstd/train_dataset/15588248514209919321/00000000.shard/
+  inflating: /scratch/tmp.35768826.angstd/train_dataset/15588248514209919321/00000000.shard/00000000.snapshot  
+   creating: /scratch/tmp.35768826.angstd/test_dataset/
+   creating: /scratch/tmp.35768826.angstd/test_dataset/7262952248879318786/
+   creating: /scratch/tmp.35768826.angstd/test_dataset/7262952248879318786/00000000.shard/
+  inflating: /scratch/tmp.35768826.angstd/test_dataset/7262952248879318786/00000000.shard/00000000.snapshot  
+ extracting: /scratch/tmp.35768826.angstd/test_dataset/snapshot.metadata  
+  inflating: /scratch/tmp.35768826.angstd/test_dataset/dataset_spec.pb  
+  inflating: /scratch/tmp.35768826.angstd/all_snippets.csv.gz  
+  inflating: /scratch/tmp.35768826.angstd/dataset_shapes.json  
+  inflating: /scratch/tmp.35768826.angstd/failed_snippets.csv  
+  inflating: /scratch/tmp.35768826.angstd/train.csv.gz  
+  inflating: /scratch/tmp.35768826.angstd/test_unfiltered.csv.gz  
+   creating: /scratch/tmp.35768826.angstd/test_unfiltered_dataset/
+   creating: /scratch/tmp.35768826.angstd/test_unfiltered_dataset/6429129690425798812/
+   creating: /scratch/tmp.35768826.angstd/test_unfiltered_dataset/6429129690425798812/00000000.shard/
+  inflating: /scratch/tmp.35768826.angstd/test_unfiltered_dataset/6429129690425798812/00000000.shard/00000000.snapshot  
+ extracting: /scratch/tmp.35768826.angstd/test_unfiltered_dataset/snapshot.metadata  
+  inflating: /scratch/tmp.35768826.angstd/test_unfiltered_dataset/dataset_spec.pb  
+
+running orcai train /scratch/tmp.35768826.angstd /cluster/home/angstd/orcAI -p /cluster/home/angstd/orcAI/orcai_parameter_v1_1.json
+
+orcai, version 1.0.4
+🐳 Training model
+orcAI 1.0.4 [started @ 2025-06-30 15:54:25]
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1751291676.871815 3818750 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1751291677.168092 3818750 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1751291679.899186 3818750 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1751291679.899240 3818750 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1751291679.899245 3818750 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1751291679.899250 3818750 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+    Platform: Linux-5.15.0-141-generic-x86_64-with-glibc2.35
+    Python version: 3.11.6 (main, Jun 20 2024, 16:12:48) [GCC 12.2.0]
+    Tensorflow version: 2.19.0
+    Keras version: 3.10.0
+    CUDA version: 12.5.1
+    cuDNN version: 9
+    Available TensorFlow devices: /GPU:0: Quadro RTX 6000
+🐳 Loading parameter [0:01:27]
+    Output directory: /cluster/home/angstd/orcAI
+    Data directory: /scratch/tmp.35768826.angstd
+🐳 Loading training and validation datasets from /scratch/tmp.35768826.angstd [0:01:27, 𝚫 0:00:00]
+    Loading dataset shapes from JSON file
+I0000 00:00:1751291753.119927 3818750 gpu_device.cc:2019] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 22806 MB memory:  -> device: 0, name: Quadro RTX 6000, pci bus id: 0000:a1:00.0, compute capability: 7.5
+    Batch size 64
+🐳 Building model [0:01:33, 𝚫 0:00:06]
+🐳 Building model architecture [0:01:35, 𝚫 0:00:02]
+    model name:          orcai-v1_1
+    model architecture:  ResNetLSTM
+    model input shape:   (None, 736, 171, 1)
+    model output shape:  (None, 46, 7)
+    actual input_shape:  (736, 171, 1)
+    actual output_shape: (46, 7)
+    n_filters:           4
+    num_labels:          7
+🐳 Compiling model: orcai-v1_1 [0:01:35, 𝚫 0:00:00]
+    Model size:
+        Total parameter: 996039
+        Trainable parameter: 994959
+        Non-trainable parameter: 1080
+        memory usage: 1.67 GB
+🐳 Fitting model: orcai-v1_1 [0:01:35, 𝚫 0:00:00]
+    Monitoring val_MBA
+0epoch [00:00, ?epoch/s]  0%|          | 0/30 [00:00<?, ?epoch/s]I0000 00:00:1751291774.061405 3818858 cuda_dnn.cc:529] Loaded cuDNN version 90300
+  3%|▎         | 1/30 [34:13<16:32:35, 2053.65s/epoch, MBA=0.92, loss=0.699, val_MBA=0.949, val_loss=0.273, learning_rate=0.0001]  7%|▋         | 2/30 [1:08:20<15:56:24, 2049.45s/epoch, MBA=0.95, loss=0.214, val_MBA=0.953, val_loss=0.169, learning_rate=0.0001] 10%|█         | 3/30 [1:42:40<15:24:28, 2054.37s/epoch, MBA=0.955, loss=0.148, val_MBA=0.956, val_loss=0.134, learning_rate=0.0001] 13%|█▎        | 4/30 [2:17:05<14:51:59, 2058.45s/epoch, MBA=0.958, loss=0.123, val_MBA=0.951, val_loss=0.135, learning_rate=0.0001] 17%|█▋        | 5/30 [2:50:53<14:13:07, 2047.50s/epoch, MBA=0.961, loss=0.11, val_MBA=0.958, val_loss=0.118, learning_rate=5e-5]    20%|██        | 6/30 [3:25:15<13:40:58, 2052.42s/epoch, MBA=0.963, loss=0.106, val_MBA=0.959, val_loss=0.118, learning_rate=5e-5] 23%|██▎       | 7/30 [3:59:36<13:07:54, 2055.43s/epoch, MBA=0.963, loss=0.102, val_MBA=0.934, val_loss=0.173, learning_rate=5e-5] 27%|██▋       | 8/30 [4:33:58<12:34:26, 2057.58s/epoch, MBA=0.964, loss=0.0994, val_MBA=0.959, val_loss=0.12, learning_rate=5e-5] 30%|███       | 9/30 [5:08:21<12:00:40, 2059.06s/epoch, MBA=0.965, loss=0.0969, val_MBA=0.959, val_loss=0.119, learning_rate=5e-5] 33%|███▎      | 10/30 [5:42:43<11:26:38, 2059.94s/epoch, MBA=0.966, loss=0.0947, val_MBA=0.959, val_loss=0.12, learning_rate=5e-5] 37%|███▋      | 11/30 [6:16:30<10:49:08, 2049.94s/epoch, MBA=0.968, loss=0.0898, val_MBA=0.958, val_loss=0.121, learning_rate=2.5e-5] 40%|████      | 12/30 [6:50:18<10:12:59, 2043.31s/epoch, MBA=0.968, loss=0.088, val_MBA=0.958, val_loss=0.122, learning_rate=2.5e-5]  43%|████▎     | 13/30 [7:24:05<9:37:31, 2038.34s/epoch, MBA=0.969, loss=0.0869, val_MBA=0.957, val_loss=0.123, learning_rate=2.5e-5] 47%|████▋     | 14/30 [7:57:51<9:02:35, 2034.72s/epoch, MBA=0.97, loss=0.084, val_MBA=0.959, val_loss=0.123, learning_rate=1.25e-5]  50%|█████     | 15/30 [8:31:38<8:28:06, 2032.41s/epoch, MBA=0.97, loss=0.083, val_MBA=0.958, val_loss=0.125, learning_rate=1.25e-5] 53%|█████▎    | 16/30 [9:05:23<7:53:41, 2030.12s/epoch, MBA=0.97, loss=0.0824, val_MBA=0.958, val_loss=0.128, learning_rate=1.25e-5] 57%|█████▋    | 17/30 [9:39:07<7:19:27, 2028.25s/epoch, MBA=0.971, loss=0.0808, val_MBA=0.958, val_loss=0.127, learning_rate=6.25e-6] 60%|██████    | 18/30 [10:12:51<6:45:22, 2026.87s/epoch, MBA=0.971, loss=0.0804, val_MBA=0.958, val_loss=0.127, learning_rate=6.25e-6] 63%|██████▎   | 19/30 [10:46:34<6:11:22, 2025.69s/epoch, MBA=0.971, loss=0.0799, val_MBA=0.958, val_loss=0.127, learning_rate=6.25e-6] 63%|██████▎   | 19/30 [10:46:34<6:14:19, 2041.80s/epoch, MBA=0.971, loss=0.0799, val_MBA=0.958, val_loss=0.127, learning_rate=6.25e-6]
+🐳 Saving Model [10:48:48, 𝚫 10:47:13]
+🐳 Training model finished. Model saved to orcai-v1_1.keras [10:48:49, 𝚫 0:00:00]
+
+running orcai test -tu /cluster/home/angstd/orcAI/orcai-v1_1 /scratch/tmp.35768826.angstd
+
+🐳 Testing model orcai-v1_1
+orcAI 1.0.4 [started @ 2025-07-01 02:43:28]
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1751330615.991415 3865382 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1751330616.005606 3865382 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1751330616.943960 3865382 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1751330616.944009 3865382 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1751330616.944015 3865382 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1751330616.944019 3865382 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+🐳 Loading model [0:01:08]
+    Model directory: /cluster/home/angstd/orcAI/orcai-v1_1
+    Model data directory: /scratch/tmp.35768826.angstd
+I0000 00:00:1751330677.320752 3865382 gpu_device.cc:2019] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 22806 MB memory:  -> device: 0, name: Quadro RTX 6000, pci bus id: 0000:a1:00.0, compute capability: 7.5
+🐳 Testing model on test_data [0:01:15, 𝚫 0:00:07]
+    Evaluating model on test_data
+I0000 00:00:1751330686.392866 3865435 cuda_dnn.cc:529] Loaded cuDNN version 90300
+    {
+        "MBA": 0.9621333479881287,
+        "loss": 0.10975197702646255
+    }
+🐳 Calculating confusion table for test_data [0:02:11, 𝚫 0:00:56]
+                    TP        FN        FP        TN        PR        RE        F1    Total
+    SS        0.187025  0.065369  0.026153  0.721453  0.877317  0.741004  0.803419  1101010
+    TAILSLAP  0.002114  0.003434  0.000443  0.994008  0.826599  0.381014  0.521601   696762
+    BUZZ      0.020454  0.016105  0.007022  0.956420  0.744439  0.559488  0.638847   557980
+    HERDING   0.009665  0.006455  0.001052  0.982827  0.901803  0.599549  0.720251   439944
+    PHS       0.000756  0.004469  0.001214  0.993561  0.383784  0.144701  0.210163   281704
+    BR        0.076059  0.009410  0.003061  0.911470  0.961310  0.889905  0.924230   106168
+    WHISTLE   0.004078  0.012147  0.003426  0.980349  0.543478  0.251340  0.343721    91954
+🐳 Misclassification tables on dataset: [0:04:52, 𝚫 0:02:41]
+    
+true_pred
+                       pred_BR  pred_BUZZ  pred_HERDING  pred_PHS  pred_SS  pred_TAILSLAP  pred_WHISTLE  pred_NOLABEL  fraction_time
+        true_BR          0.890      0.000         0.000     0.001    0.003          0.000         0.000         0.106        0.00824
+        true_BUZZ        0.000      0.549         0.000     0.000    0.019          0.003         0.000         0.428        0.01663
+        true_HERDING     0.000      0.000         0.603     0.000    0.061          0.000         0.016         0.320        0.00626
+        true_PHS         0.000      0.049         0.000     0.167    0.000          0.000         0.000         0.783        0.00116
+        true_SS          0.000      0.005         0.002     0.000    0.740          0.000         0.004         0.250        0.25041
+        true_TAILSLAP    0.001      0.156         0.000     0.000    0.025          0.334         0.000         0.483        0.00310
+        true_WHISTLE     0.000      0.000         0.000     0.000    0.095          0.000         0.380         0.524        0.00090
+        true_NOLABEL     0.006      0.010         0.001     0.001    0.035          0.000         0.004         0.942        0.71331
+    
+pred_true
+                       true_BR  true_BUZZ  true_HERDING  true_PHS  true_SS  true_TAILSLAP  true_WHISTLE  true_NOLABEL  fraction_time
+        pred_BR          0.961      0.000         0.000     0.000    0.000          0.000         0.000         0.039        0.00774
+        pred_BUZZ        0.000      0.716         0.000     0.007    0.034          0.013         0.000         0.230        0.01315
+        pred_HERDING     0.000      0.000         0.919     0.000    0.011          0.000         0.000         0.070        0.00409
+        pred_PHS         0.000      0.000         0.000     0.384    0.000          0.000         0.000         0.616        0.00051
+        pred_SS          0.000      0.002         0.002     0.000    0.877          0.000         0.001         0.118        0.21415
+        pred_TAILSLAP    0.000      0.025         0.000     0.000    0.001          0.827         0.000         0.146        0.00116
+        pred_WHISTLE     0.000      0.000         0.000     0.000    0.048          0.000         0.667         0.285        0.00052
+        pred_NOLABEL     0.001      0.010         0.003     0.001    0.084          0.002         0.001         0.899        0.75869
+🐳 Saving test results [0:04:52, 𝚫 0:00:00]
+    Saved test results to /cluster/home/angstd/orcAI/orcai-v1_1/test
+🐳 Testing model on test_unfiltered_dataset [0:04:52, 𝚫 0:00:00]
+    Evaluating model on test_unfiltered_dataset
+    {
+        "MBA": 0.9840167164802551,
+        "loss": 0.07584443688392639
+    }
+🐳 Calculating confusion table for test_unfiltered_dataset [0:12:50, 𝚫 0:07:58]
+                    TP        FN        FP        TN        PR        RE        F1     Total
+    SS        0.023601  0.008243  0.019528  0.948629  0.547217  0.741148  0.629586  10834886
+    TAILSLAP  0.000409  0.000649  0.000125  0.998816  0.765807  0.386683  0.513887   4498478
+    HERDING   0.001743  0.001048  0.003111  0.994098  0.359044  0.624338  0.455906   3112130
+    BUZZ      0.004620  0.003651  0.014308  0.977421  0.244079  0.558547  0.339708   2991196
+    PHS       0.000200  0.001181  0.002457  0.996161  0.075381  0.145030  0.099201   1332758
+    BR        0.018348  0.002263  0.001826  0.977563  0.909509  0.890189  0.899745    539028
+    WHISTLE   0.000910  0.002980  0.001676  0.994434  0.352013  0.233998  0.281122    489900
+🐳 Misclassification tables on dataset: [0:34:34, 𝚫 0:21:44]
+    
+true_pred
+                       pred_BR  pred_BUZZ  pred_HERDING  pred_PHS  pred_SS  pred_TAILSLAP  pred_WHISTLE  pred_NOLABEL  fraction_time
+        true_BR          0.890      0.000         0.000     0.001    0.002          0.000         0.000         0.106        0.00101
+        true_BUZZ        0.000      0.548         0.000     0.000    0.019          0.003         0.000         0.430        0.00201
+        true_HERDING     0.000      0.000         0.627     0.000    0.054          0.000         0.015         0.303        0.00077
+        true_PHS         0.000      0.049         0.000     0.166    0.001          0.000         0.000         0.784        0.00015
+        true_SS          0.000      0.005         0.002     0.000    0.740          0.000         0.004         0.249        0.03103
+        true_TAILSLAP    0.001      0.158         0.000     0.000    0.025          0.338         0.000         0.479        0.00038
+        true_WHISTLE     0.000      0.000         0.000     0.000    0.099          0.000         0.350         0.551        0.00012
+        true_NOLABEL     0.010      0.017         0.002     0.002    0.020          0.000         0.005         0.944        0.96455
+    
+pred_true
+                       true_BR  true_BUZZ  true_HERDING  true_PHS  true_SS  true_TAILSLAP  true_WHISTLE  true_NOLABEL  fraction_time
+        pred_BR           0.91      0.000         0.000     0.000    0.000          0.000         0.000         0.090        0.00102
+        pred_BUZZ         0.00      0.224         0.000     0.002    0.012          0.004         0.000         0.758        0.00517
+        pred_HERDING      0.00      0.000         0.357     0.000    0.004          0.000         0.000         0.639        0.00137
+        pred_PHS          0.00      0.000         0.000     0.075    0.000          0.000         0.000         0.925        0.00033
+        pred_SS           0.00      0.001         0.001     0.000    0.552          0.000         0.001         0.445        0.04292
+        pred_TAILSLAP     0.00      0.025         0.000     0.000    0.001          0.744         0.000         0.230        0.00016
+        pred_WHISTLE      0.00      0.000         0.000     0.000    0.025          0.000         0.412         0.563        0.00010
+        pred_NOLABEL      0.00      0.001         0.000     0.000    0.008          0.000         0.000         0.990        0.94893
+🐳 Saving test results [0:34:34, 𝚫 0:00:00]
+    Saved test results to /cluster/home/angstd/orcAI/orcai-v1_1/test
+🐳 Model testing completed. [0:34:34, 𝚫 0:00:00]
