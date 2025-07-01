@@ -4,17 +4,22 @@ library(kableExtra)
 library(here)
 library(glue)
 
-test_sampled_data_mc_table_paths <- tibble(
-    dataset = "all",
-    path = c(
-        here("trained_models", "orcai-v1", "test", "test_sampled_data_misclassification_table_pred_true.csv")
+best_orcaiv1_model <- read_csv(here("plots_and_tables", "output", "best_orcaiv1_model.csv"),
+    col_types = cols(
+        model = col_character(),
+        architecture = col_character(),
+        replicate = col_double(),
+        epoch = col_double(),
+        type = col_character(),
+        metric = col_character(),
+        value = col_double()
     )
 )
+best_replicate <- best_orcaiv1_model$replicate[1]
 
-
-sampled_data_TP <- here(
-    "trained_models", "orcai-v1", "test",
-    "test_sampled_data_misclassification_table_true_pred.csv"
+unfiltered_dataset_TP <- here(
+    "trained_models", glue("orcai-v1_{best_replicate}"), "test",
+    "test_unfiltered_dataset_misclassification_table_true_pred.csv"
 ) |>
     read_csv(
         col_types = cols(Label = col_character(), .default = col_double())
@@ -25,7 +30,7 @@ sampled_data_TP <- here(
         "HERDING" ~ "HERD",
         "TAILSLAP" ~ "TS",
         "WHISTLE" ~ "WH",
-        "NOLABEL" ~ "NONE",
+        "NOLABEL" ~ "none",
         "fraction_time" ~ "fraction time",
         .default = .x
     )) |>
@@ -35,13 +40,14 @@ sampled_data_TP <- here(
             "HERDING" ~ "HERD",
             "TAILSLAP" ~ "TS",
             "WHISTLE" ~ "WH",
-            "NOLABEL" ~ "NONE",
+            "NOLABEL" ~ "none",
             .default = Label
         ),
     )
-sampled_data_PT <- here(
-    "trained_models", "orcai-v1", "test",
-    "test_sampled_data_misclassification_table_pred_true.csv"
+
+unfiltered_dataset_PT <- here(
+    "trained_models", glue("orcai-v1_{best_replicate}"), "test",
+    "test_unfiltered_dataset_misclassification_table_pred_true.csv"
 ) |>
     read_csv(
         col_types = cols(Label = col_character(), .default = col_double())
@@ -52,7 +58,7 @@ sampled_data_PT <- here(
         "HERDING" ~ "HERD",
         "TAILSLAP" ~ "TS",
         "WHISTLE" ~ "WH",
-        "NOLABEL" ~ "NONE",
+        "NOLABEL" ~ "none",
         "fraction_time" ~ "fraction time",
         .default = .x
     )) |>
@@ -62,13 +68,13 @@ sampled_data_PT <- here(
             "HERDING" ~ "HERD",
             "TAILSLAP" ~ "TS",
             "WHISTLE" ~ "WH",
-            "NOLABEL" ~ "NONE",
+            "NOLABEL" ~ "none",
             .default = Label
         ),
         ` ` = "predicted"
     )
 
-TP_table <- sampled_data_TP |>
+TP_table <- unfiltered_dataset_TP |>
     kbl(
         format = "latex", digits = 4,
         booktabs = TRUE
@@ -77,7 +83,7 @@ TP_table <- sampled_data_TP |>
     collapse_rows(1, latex_hline = "none") |>
     write_lines(file = here("plots_and_tables", "output", "mc_table_TP.tex"))
 
-PT_table <- sampled_data_PT |>
+PT_table <- unfiltered_dataset_PT |>
     kbl(
         format = "latex", digits = 4,
         booktabs = TRUE
@@ -95,6 +101,7 @@ TP_table_str <- TP_table |>
         "\\\\rotatebox[origin=c]{90}{true}"
     ) |>
     str_split(pattern = "(\n)+")
+
 PT_table_str <- PT_table |>
     toString() |>
     str_replace(
@@ -116,7 +123,7 @@ TP_PT_table_footnote_2 <- paste0(
     "\\multicolumn{11}{l}{",
     "TS: tail slaps; ",
     "WH: whistle; ",
-    "NONE: no calls annotated (top) / predicted (bottom)",
+    "none: no trained calls annotated (top) / predicted (bottom)",
     "}\\\\"
 )
 
