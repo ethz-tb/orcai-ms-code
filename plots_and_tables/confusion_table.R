@@ -3,8 +3,24 @@ library(knitr)
 library(kableExtra)
 library(here)
 
+best_orcaiv1_model <- read_csv(here("plots_and_tables", "output", "best_orcaiv1_model.csv"),
+    col_types = cols(
+        model = col_character(),
+        architecture = col_character(),
+        replicate = col_double(),
+        epoch = col_double(),
+        type = col_character(),
+        metric = col_character(),
+        value = col_double()
+    )
+)
+best_replicate <- best_orcaiv1_model$replicate[1]
+
 test_data_confusion <- read_csv(
-    file = here("trained_models", "orcai-v1", "test", "test_data_confusion_table.csv"),
+    file = here(
+        "trained_models", glue("orcai-v1_{best_replicate}"),
+        "test", "test_data_confusion_table.csv"
+    ),
     col_types = cols(
         Label = col_character(),
         TP = col_double(),
@@ -17,11 +33,14 @@ test_data_confusion <- read_csv(
         Total = col_double()
     )
 ) |>
-    mutate(Set = "select", .before = TP) |>
+    mutate(Set = "filtered data", .before = TP) |>
     arrange(Label)
 
 unfiltered_data_confusion <- read_csv(
-    file = here("trained_models", "orcai-v1", "test", "test_sampled_data_confusion_table.csv"),
+    file = here(
+        "trained_models", glue("orcai-v1_{best_replicate}"),
+        "test", "test_unfiltered_dataset_confusion_table.csv"
+    ),
     col_types = cols(
         Label = col_character(),
         TP = col_double(),
@@ -34,7 +53,7 @@ unfiltered_data_confusion <- read_csv(
         Total = col_double()
     )
 ) |>
-    mutate(Set = "all", .before = TP) |>
+    mutate(Set = "unfiltered data", .before = TP) |>
     arrange(Label)
 
 confusion_table <- bind_rows(test_data_confusion, unfiltered_data_confusion) |>
