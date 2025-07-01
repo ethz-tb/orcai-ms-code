@@ -1,97 +1,110 @@
 library(tidyverse)
-library(here)
-library(jsonlite)
 library(patchwork)
+library(here)
 
-model_paths <- c(
-    here("trained_models", "orcai-v1"),
-    here("trained_models", "orcai-v1-3750-LSTM_1"),
-    here("trained_models", "orcai-v1-3750-1DC_1")
-)
-
-model_data_list <- list()
-
-for (i in seq_along(model_paths)) {
-    model_info <- read_json(here(model_paths[i], "orcai_parameter.json"))
-
-    model_data_list[[i]] <- read_json(here(model_paths[i], "training_history.json")) |>
-        as_tibble() |>
-        unnest(cols = c(MBA, loss, val_MBA, val_loss, learning_rate)) |>
-        mutate(
-            model = model_info$name,
-            architecture = model_info$architecture,
-            epoch = seq_len(n()),
-        )
-}
-
-
-model_data <- bind_rows(model_data_list)
-
-model_data_training <- model_data |>
-    select(
-        model, architecture, epoch, loss, MBA, learning_rate
-    ) |>
-    pivot_longer(
-        !c(model, architecture, epoch),
-        values_to = "training"
+model_training_metrics <- read_csv(
+    here("plots_and_tables", "output", "model_training_metrics.csv"),
+    col_types = cols(
+        model = col_character(),
+        architecture = col_character(),
+        replicate = col_double(),
+        epoch = col_double(),
+        metric = col_character(),
+        type = col_character(),
+        value = col_double()
     )
-model_data_validation <- model_data |>
-    select(
-        model, architecture, epoch, val_loss, val_MBA
-    ) |>
-    rename(loss = val_loss, MBA = val_MBA) |>
-    pivot_longer(
-        !c(model, architecture, epoch),
-        values_to = "validation"
-    )
-
-plot_data <- left_join(model_data_training, model_data_validation,
-    by = join_by(model, architecture, epoch, name)
-) |>
-    pivot_longer(training:validation, names_to = "type")
-
-arch_colors <- c(
-    "ResNetLSTM" = rgb(32, 119, 180, maxColorValue = 255),
-    "ResNet1DConv" = rgb(255, 127, 15, maxColorValue = 255)
 )
-type_lines <- c(
-    "validation" = 1,
-    "training" = 2
-)
-
 common_theme <- theme_bw() + theme(
     text = element_text(size = 7),
     legend.margin = margin(),
     legend.title = element_blank()
 )
 
-plot_loss <- plot_data |>
-    filter(model != "orcai-v1", name == "loss") |>
+# plot individual runs
+model_colors <- c(
+    "orcai-v1" = rgb(34, 160, 43, maxColorValue = 255),
+    "orcai-v1-3750-LSTM" = rgb(32, 119, 180, maxColorValue = 255),
+    "orcai-v1-3750-1DC" = rgb(255, 127, 15, maxColorValue = 255)
+)
+common_theme <- theme_bw() + theme(
+    text = element_text(size = 7),
+    legend.margin = margin(),
+    legend.title = element_blank()
+)
+replicate_alpha <- c(
+    "1" = 0.5,
+    "2" = 0.7,
+    "3" = 0.9
+)
+
+type_lines <- c(
+    "validation" = 1,
+    "training" = 2
+)
+
+epoch_limits <- c(0, 30)
+epoch_breaks <- seq(epoch_limits[1], epoch_limits[2], 5)
+
+# model_training_metrics |>
+#     group_by(metric) |>
+#     summarize(
+#         min = min(value, na.rm = TRUE),
+#         max = max(value, na.rm = TRUE)
+#     )
+
+loss_limits <- c(0, 0.7)
+loss_breaks <- seq(loss_limits[1], loss_limits[2], 0.1)
+
+mba_limits <- c(0.9, 0.98)
+mba_breaks <- seq(mba_limits[1], mba_limits[2], 0.01)
+
+lr_limits <- c(0, 1e-4)
+lr_breaks <- waiver() # default breaks
+
+plot_loss <- model_training_metrics |>
+    filter(model != "orcai-v1", metric == "loss") |>
     ggplot(
-        mapping = aes(x = epoch, y = value, colour = architecture, linetype = type)
+        mapping = aes(
+            x = epoch, y = value,
+            colour = model,
+            alpha = as.character(replicate),
+            linetype = type
+        )
     ) +
     geom_line() +
+    scale_linetype_manual(values = type_lines, name = "", guide = guide_legend(order = 2)) +
+    scale_colour_manual(values = model_colors, name = "", guide = guide_legend(order = 1)) +
+    scale_alpha_manual(values = replicate_alpha, name = "", guide = "none") +
+    scale_x_continuous(limits = epoch_limits, breaks = epoch_breaks) +
+    scale_y_continuous(limits = loss_limits, breaks = loss_breaks) +
     labs(
         y = "Loss (Masked Binary Crossentropy)",
         x = "Epoch"
     ) +
-    scale_linetype_manual(values = type_lines, name = "", guide = guide_legend(order = 2)) +
-    scale_colour_manual(values = arch_colors, name = "", guide = guide_legend(order = 1)) +
-    scale_x_continuous(limits = c(0, 30), breaks = seq(0, 30, 5)) +
-    scale_y_continuous(limits = c(0, 0.7), breaks = seq(0, 0.7, 0.1)) +
     common_theme +
-    theme(legend.position = "inside", legend.position.inside = c(0.95, 0.95), legend.justification = c(1, 1))
+    theme(
+        legend.position = "inside",
+        legend.position.inside = c(0.95, 0.95),
+        legend.justification = c(1, 1),
+        legend.text = element_text(size = 5)
+    )
 
-plot_MBA <- plot_data |>
-    filter(model != "orcai-v1", name == "MBA") |>
+plot_MBA <- model_training_metrics |>
+    filter(model != "orcai-v1", metric == "MBA") |>
     ggplot(
-        mapping = aes(x = epoch, y = value, colour = architecture, linetype = type)
+        mapping = aes(
+            x = epoch, y = value,
+            colour = model,
+            alpha = as.character(replicate),
+            linetype = type
+        )
     ) +
-    scale_colour_manual(values = arch_colors, name = "") +
-    scale_linetype_manual(values = type_lines, name = "") +
-    scale_x_continuous(limits = c(0, 30), breaks = seq(0, 30, 5)) +
-    scale_y_continuous(limits = c(0.91, 0.97), breaks = seq(0.91, 0.97, 0.01)) +
     geom_line() +
+    scale_linetype_manual(values = type_lines, name = "") +
+    scale_colour_manual(values = model_colors, name = "") +
+    scale_alpha_manual(values = replicate_alpha, name = "", guide = "none") +
+    scale_x_continuous(limits = epoch_limits, breaks = epoch_breaks) +
+    scale_y_continuous(limits = mba_limits, breaks = mba_breaks) +
     labs(
         y = "Masked Binary Accuracy",
         x = "Epoch"
@@ -99,15 +112,21 @@ plot_MBA <- plot_data |>
     common_theme +
     theme(legend.position = "none")
 
-plot_LR <- plot_data |>
-    filter(model != "orcai-v1", name == "learning_rate", type == "training") |>
+
+plot_LR <- model_training_metrics |>
+    filter(model != "orcai-v1", metric == "learning_rate", type == "training") |>
     ggplot(
-        mapping = aes(x = epoch, y = value, colour = architecture)
+        mapping = aes(
+            x = epoch, y = value,
+            colour = model,
+            alpha = as.character(replicate)
+        )
     ) +
-    scale_colour_manual(values = arch_colors, name = "") +
-    scale_x_continuous(limits = c(0, 30), breaks = seq(0, 30, 5)) +
-    scale_y_continuous(limits = c(0, 1e-4)) +
     geom_line() +
+    scale_colour_manual(values = model_colors, name = "") +
+    scale_alpha_manual(values = replicate_alpha, name = "", guide = "none") +
+    scale_x_continuous(limits = epoch_limits, breaks = epoch_breaks) +
+    scale_y_continuous(limits = lr_limits, breaks = lr_breaks) +
     labs(
         y = "Learning Rate",
         x = "Epoch"
@@ -115,82 +134,20 @@ plot_LR <- plot_data |>
     common_theme +
     theme(legend.position = "none")
 
-plot <- plot_loss + plot_MBA + plot_LR +
+plot_all <- plot_loss + plot_MBA + plot_LR +
     plot_annotation(tag_levels = "A")
 
-
 ggsave(
+    plot = plot_all,
     here("plots_and_tables", "output", "training_history.pdf"),
     width = 183,
     height = 80,
     unit = "mm"
 )
 
-unique(plot_data$model)
-
-model_colors <- c(
-    "orcai-v1" = rgb(34, 160, 43, maxColorValue = 255),
-    "orcai-v1-3750-LSTM_1" = rgb(32, 119, 180, maxColorValue = 255),
-    "orcai-v1-3750-1DC_1" = rgb(255, 127, 15, maxColorValue = 255)
-)
-
-
-plot_loss <- plot_data |>
-    filter(name == "loss") |>
-    ggplot(
-        mapping = aes(x = epoch, y = value, colour = model, linetype = type)
-    ) +
-    geom_line() +
-    labs(
-        y = "Loss (Masked Binary Crossentropy)",
-        x = "Epoch"
-    ) +
-    scale_linetype_manual(values = type_lines, name = "", guide = guide_legend(order = 2)) +
-    scale_colour_manual(values = model_colors, name = "", guide = guide_legend(order = 1)) +
-    scale_x_continuous(limits = c(0, 30), breaks = seq(0, 30, 5)) +
-    scale_y_continuous(limits = c(0, 0.7), breaks = seq(0, 0.7, 0.1)) +
-    common_theme +
-    theme(legend.position = "inside", legend.position.inside = c(0.95, 0.95), legend.justification = c(1, 1))
-
-plot_MBA <- plot_data |>
-    filter(name == "MBA") |>
-    ggplot(
-        mapping = aes(x = epoch, y = value, colour = model, linetype = type)
-    ) +
-    scale_colour_manual(values = model_colors, name = "") +
-    scale_linetype_manual(values = type_lines, name = "") +
-    scale_x_continuous(limits = c(0, 30), breaks = seq(0, 30, 5)) +
-    scale_y_continuous(limits = c(0.91, 0.98), breaks = seq(0.91, 0.98, 0.01)) +
-    geom_line() +
-    labs(
-        y = "Masked Binary Accuracy",
-        x = "Epoch"
-    ) +
-    common_theme +
-    theme(legend.position = "none")
-
-plot_LR <- plot_data |>
-    filter(name == "learning_rate", type == "training") |>
-    ggplot(
-        mapping = aes(x = epoch, y = value, colour = model)
-    ) +
-    scale_colour_manual(values = model_colors, name = "") +
-    scale_x_continuous(limits = c(0, 30), breaks = seq(0, 30, 5)) +
-    scale_y_continuous(limits = c(0, 1e-4)) +
-    geom_line() +
-    labs(
-        y = "Learning Rate",
-        x = "Epoch"
-    ) +
-    common_theme +
-    theme(legend.position = "none")
-
-plot <- plot_loss + plot_MBA + plot_LR +
-    plot_annotation(tag_levels = "A")
-
-
 ggsave(
-    here("plots_and_tables", "output", "training_history_all.pdf"),
+    plot = plot_all,
+    here("plots_and_tables", "output", "training_history.png"),
     width = 183,
     height = 80,
     unit = "mm"
