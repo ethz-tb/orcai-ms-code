@@ -99,7 +99,7 @@ hpsearch_plot <- filters_plot +
     plot_annotation(tag_levels = "A")
 
 ggsave(
-    here("plots_and_tables", "output", "hpsearch_plot.pdf"),
+    here("analysis_scripts", "output", "hpsearch_plot.pdf"),
     width = 183,
     height = 60,
     unit = "mm",

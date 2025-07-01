@@ -32,7 +32,7 @@ for model_name, model_path in model_paths.items():
     print(f"Number of layers in {model_name} model: {len(model.layers)}")
 
     model_structure_plot_path = Path(
-        f"plots_and_tables/output/{model_name}-model_structure.pdf"
+        f"analysis_scripts/output/{model_name}-model_structure.pdf"
     )
     keras.utils.plot_model(
         model,

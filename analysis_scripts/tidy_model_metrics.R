@@ -120,6 +120,6 @@ model_test_metrics <- model_test_metrics_wide |>
     )
 
 # save
-write_excel_csv(model_training_metrics, file = here("plots_and_tables", "output", "model_training_metrics.csv"))
-write_excel_csv(model_test_metrics, file = here("plots_and_tables", "output", "model_test_metrics.csv"))
-write_excel_csv(best_models_metrics, file = here("plots_and_tables", "output", "best_models_metrics.csv"))
+write_excel_csv(model_training_metrics, file = here("analysis_scripts", "output", "model_training_metrics.csv"))
+write_excel_csv(model_test_metrics, file = here("analysis_scripts", "output", "model_test_metrics.csv"))
+write_excel_csv(best_models_metrics, file = here("analysis_scripts", "output", "best_models_metrics.csv"))

@@ -4,7 +4,7 @@ library(kableExtra)
 library(here)
 library(glue)
 
-best_orcaiv1_model <- read_csv(here("plots_and_tables", "output", "best_orcaiv1_model.csv"),
+best_orcaiv1_model <- read_csv(here("analysis_scripts", "output", "best_orcaiv1_model.csv"),
     col_types = cols(
         model = col_character(),
         architecture = col_character(),
@@ -81,7 +81,7 @@ TP_table <- unfiltered_dataset_TP |>
     ) |>
     add_header_above(c(" " = 2, "predicted" = 8, " " = 1)) %>%
     collapse_rows(1, latex_hline = "none") |>
-    write_lines(file = here("plots_and_tables", "output", "mc_table_TP.tex"))
+    write_lines(file = here("analysis_scripts", "output", "mc_table_TP.tex"))
 
 PT_table <- unfiltered_dataset_PT |>
     kbl(
@@ -90,7 +90,7 @@ PT_table <- unfiltered_dataset_PT |>
     ) |>
     add_header_above(c(" " = 2, "true" = 8, " " = 1)) %>%
     collapse_rows(1, latex_hline = "none") |>
-    write_lines(file = here("plots_and_tables", "output", "mc_table_PT.tex"))
+    write_lines(file = here("analysis_scripts", "output", "mc_table_PT.tex"))
 
 # combine tables
 
@@ -134,4 +134,4 @@ TP_PT_table <- c(
     TP_PT_table_footnote_2,
     PT_table_str[[1]][17]
 ) |>
-    write_lines(file = here("plots_and_tables", "output", "mc_table_TP_PT.tex"))
+    write_lines(file = here("analysis_scripts", "output", "mc_table_TP_PT.tex"))

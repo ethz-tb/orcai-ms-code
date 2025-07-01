@@ -63,5 +63,5 @@ training_times_summary_arch <- training_times |>
         .groups = "keep"
     )
 
-write_csv(training_times_summary, here("plots_and_tables", "output", "training_times.csv"))
-write_csv(training_times_summary_arch, here("plots_and_tables", "output", "training_times_arch.csv"))
+write_csv(training_times_summary, here("analysis_scripts", "output", "training_times.csv"))
+write_csv(training_times_summary_arch, here("analysis_scripts", "output", "training_times_arch.csv"))
