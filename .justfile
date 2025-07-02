@@ -17,8 +17,12 @@ make-stats: extract-metrics
 make-pdf-tables: make-tables
     pdflatex -output-directory analysis_scripts/output analysis_scripts/table4_confusion.tex
     rm analysis_scripts/output/table4_confusion.aux analysis_scripts/output/table4_confusion.log
-    pdflatex -output-directory analysis_scripts/output analysis_scripts/table5_misclassification.tex
-    rm analysis_scripts/output/table5_misclassification.aux analysis_scripts/output/table5_misclassification.log
+    pdflatex -output-directory analysis_scripts/output analysis_scripts/table5_misclassification_combined.tex
+    rm analysis_scripts/output/table5_misclassification_combined.aux analysis_scripts/output/table5_misclassification_combined.log
+    pdflatex -output-directory analysis_scripts/output analysis_scripts/table5_misclassification_TP.tex
+    rm  analysis_scripts/output/table5_misclassification_TP.aux analysis_scripts/output/table5_misclassification_TP.log
+    pdflatex -output-directory analysis_scripts/output analysis_scripts/table6_misclassification_PT.tex
+    rm analysis_scripts/output/table6_misclassification_PT.aux analysis_scripts/output/table6_misclassification_PT.log
 
 extract-metrics:
     echo "Extracting metrics..."
