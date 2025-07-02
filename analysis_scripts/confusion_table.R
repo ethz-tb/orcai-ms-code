@@ -78,6 +78,6 @@ kbl(confusion_table,
     format = "latex", digits = 4,
     booktabs = TRUE
 ) |>
-    pack_rows("select", 1, 7) |>
-    pack_rows("all", 8, 14) |>
+    pack_rows("filtered data", 1, 7) |>
+    pack_rows("unfiltered data", 8, 14) |>
     write_lines(file = here("analysis_scripts", "output", "confusion_table.tex"))
