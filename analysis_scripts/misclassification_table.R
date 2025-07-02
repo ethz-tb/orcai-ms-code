@@ -43,6 +43,7 @@ unfiltered_dataset_TP <- here(
             "NOLABEL" ~ "none",
             .default = Label
         ),
+        ` ` = "annotated signal"
     )
 
 unfiltered_dataset_PT <- here(
@@ -71,42 +72,40 @@ unfiltered_dataset_PT <- here(
             "NOLABEL" ~ "none",
             .default = Label
         ),
-        ` ` = "predicted"
+        ` ` = "predicted signal"
     )
 
-TP_table <- unfiltered_dataset_TP |>
+TP_table_raw <- unfiltered_dataset_TP |>
     kbl(
         format = "latex", digits = 4,
         booktabs = TRUE
     ) |>
-    add_header_above(c(" " = 2, "predicted" = 8, " " = 1)) %>%
-    collapse_rows(1, latex_hline = "none") |>
-    write_lines(file = here("analysis_scripts", "output", "mc_table_TP.tex"))
+    add_header_above(c(" " = 2, "predicted signal" = 8, " " = 1)) |>
+    collapse_rows(1, latex_hline = "none")
 
-PT_table <- unfiltered_dataset_PT |>
+PT_table_raw <- unfiltered_dataset_PT |>
     kbl(
         format = "latex", digits = 4,
         booktabs = TRUE
     ) |>
-    add_header_above(c(" " = 2, "true" = 8, " " = 1)) %>%
-    collapse_rows(1, latex_hline = "none") |>
-    write_lines(file = here("analysis_scripts", "output", "mc_table_PT.tex"))
+    add_header_above(c(" " = 2, "annotated signal" = 8, " " = 1)) |>
+    collapse_rows(1, latex_hline = "none")
 
 # combine tables
 
-TP_table_str <- TP_table |>
+TP_table_str <- TP_table_raw |>
     toString() |>
     str_replace(
-        "\\\\raggedright\\\\arraybackslash true",
-        "\\\\rotatebox[origin=c]{90}{true}"
+        "\\\\raggedright\\\\arraybackslash annotated signal",
+        "\\\\rotatebox[origin=c]{90}{annotated signal}"
     ) |>
     str_split(pattern = "(\n)+")
 
-PT_table_str <- PT_table |>
+PT_table_str <- PT_table_raw |>
     toString() |>
     str_replace(
-        "\\\\raggedright\\\\arraybackslash predicted",
-        "\\\\rotatebox[origin=c]{90}{predicted}"
+        "\\\\raggedright\\\\arraybackslash predicted signal",
+        "\\\\rotatebox[origin=c]{90}{predicted signal}"
     ) |>
     str_split(pattern = "(\n)+")
 
@@ -119,19 +118,52 @@ TP_PT_table_footnote_1 <- paste0(
     "}\\\\"
 )
 
-TP_PT_table_footnote_2 <- paste0(
+TP_table_footnote_2 <- paste0(
     "\\multicolumn{11}{l}{",
     "TS: tail slaps; ",
     "WH: whistle; ",
-    "none: no trained calls annotated (top) / predicted (bottom)",
+    "none: no trained signal annotated",
     "}\\\\"
 )
+
+PT_table_footnote_2 <- paste0(
+    "\\multicolumn{11}{l}{",
+    "TS: tail slaps; ",
+    "WH: whistle; ",
+    "none: no trained signal predicted",
+    "}\\\\"
+)
+
+combined_table_footnote_2 <- paste0(
+    "\\multicolumn{11}{l}{",
+    "TS: tail slaps; ",
+    "WH: whistle; ",
+    "none: no trained signal annotated (top) / predicted (bottom)",
+    "}\\\\"
+)
+
+TP_table <- c(
+    TP_table_str[[1]][2:16],
+    TP_PT_table_footnote_1,
+    TP_table_footnote_2,
+    PT_table_str[[1]][17]
+) |>
+    write_lines(file = here("analysis_scripts", "output", "mc_table_TP.tex"))
+
+PT_table <- c(
+    PT_table_str[[1]][2:16],
+    TP_PT_table_footnote_1,
+    PT_table_footnote_2,
+    PT_table_str[[1]][17]
+) |>
+    write_lines(file = here("analysis_scripts", "output", "mc_table_PT.tex"))
+
 
 TP_PT_table <- c(
     TP_table_str[[1]][2:16],
     PT_table_str[[1]][3:16],
     TP_PT_table_footnote_1,
-    TP_PT_table_footnote_2,
+    combined_table_footnote_2,
     PT_table_str[[1]][17]
 ) |>
     write_lines(file = here("analysis_scripts", "output", "mc_table_TP_PT.tex"))
