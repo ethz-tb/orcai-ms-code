@@ -139,7 +139,7 @@ plot_all <- plot_loss + plot_MBA + plot_LR +
 
 ggsave(
     plot = plot_all,
-    here("analysis_scripts", "output", "training_history.pdf"),
+    here("analysis_scripts", "output", "fig2_training_history.pdf"),
     width = 183,
     height = 80,
     unit = "mm"
