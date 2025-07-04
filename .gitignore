@@ -1,3 +1,6 @@
+# vscode
+*.code-workspace
+
 # ignore word temporary files
 ~*.docx
 
