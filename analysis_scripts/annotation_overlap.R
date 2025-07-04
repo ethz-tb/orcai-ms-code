@@ -3,27 +3,40 @@ library(here)
 library(glue)
 library(jsonlite)
 
-find_overlaps <- function(start, stop, return_n = FALSE) {
+find_overlaps <- function(start, stop) {
     # returns vector of indices that overlap, provided start and stop are ordered ascending by start!
     overlaps_with_list <- list()
+    overlaps_with_n_list <- list()
     for (i in seq_len(length(start))) {
-        overlaps_with <- which(start[-c(1:i)] < stop[i]) + i
-        if (length(overlaps_with) > 0) {
-            if (return_n) {
-                overlaps_with_list[[i]] <- length(overlaps_with)
-            } else {
-                overlaps_with_list[[i]] <- str_c(overlaps_with, collapse = ", ")
-            }
-        } else {
-            if (return_n) {
-                overlaps_with_list[[i]] <- 0
-            } else {
-                overlaps_with_list[[i]] <- NA
-            }
-        }
+        # overlaps at end
+        overlaps_with_end <- which(start[-c(1:i)] < stop[i]) + i
+        # overlaps at beginning
+        overlaps_with_start <- which(stop[start < start[i]] > start[i])
+
+        overlaps_with <- c(overlaps_with_start, overlaps_with_end)
+        overlaps_with_n_list[[i]] <- length(overlaps_with)
+        overlaps_with_list[[i]] <- overlaps_with
     }
-    unlist(overlaps_with_list)
+
+    return(
+        tibble(
+            overlaps_with_n = unlist(overlaps_with_n_list),
+            overlaps_with_str = map_chr(overlaps_with_list, \(x) str_c(x, collapse = ", ")),
+            overlaps_with = overlaps_with_list
+        )
+    )
 }
+
+# test_set <- tibble(
+#     start = c(1, 2, 4, 6, 7),
+#     stop = c(3, 5, 8, 10, 9)
+# )
+
+# test_set |>
+#     mutate(
+#         find_overlaps(start, stop)
+#     )
+
 
 recording_table <- read_csv(
     file = "/Volumes/4TB/orcai_project/orca_recordings/recording_table.csv",
@@ -93,14 +106,18 @@ all_annotations_overlaps <- all_annotations |>
     group_by(recording) |>
     arrange(start, .by_group = TRUE) |>
     mutate(
-        overlaps_with_n = find_overlaps(start, stop, return_n = TRUE),
-        overlaps_with_indices = find_overlaps(start, stop)
+        find_overlaps(start, stop)
     )
 
-write_csv(all_annotations_overlaps, here("analysis_scripts", "output", "all_annotations_overlaps.csv"))
+write_csv(
+    all_annotations_overlaps |>
+        select(-overlaps_with),
+    here("analysis_scripts", "output", "all_annotations_overlaps.csv")
+)
 
 all_annotations_overlaps |>
     ungroup() |>
+    select(-overlaps_with) |>
     count(overlaps_with_n) |>
     mutate(
         total = sum(n),
