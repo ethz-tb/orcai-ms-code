@@ -124,4 +124,30 @@ all_annotations_overlaps |>
         percent = n / sum(n)
     )
 
-hist(all_annotations_overlaps$overlaps_with_n)
+ggplot(
+    data = all_annotations_overlaps,
+    mapping = aes(overlaps_with_n)
+) +
+    geom_histogram(binwidth = 1) +
+    scale_x_continuous(name = "overlaps with n", breaks = 0:6) +
+    theme_bw()
+
+# annotation duration
+
+mean_annotation_duration <- all_annotations |>
+    ungroup() |>
+    mutate(
+        duration = stop - start
+    ) |>
+    group_by(
+        label
+    ) |>
+    summarize(
+        ens = n(),
+        min = min(duration),
+        max = max(duration),
+        mean = mean(duration),
+        sd = sd(duration),
+        se = sd / sqrt(ens)
+    )
+print(mean_annotation_duration)
