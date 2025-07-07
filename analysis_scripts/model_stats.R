@@ -49,14 +49,14 @@ model_metrics_summary <- model_metrics |>
         mean = mean(value),
         sd = sd(value),
         ens = n(),
-        se = sd / ens,
+        se = sd / sqrt(ens),
         .groups = "drop"
     ) |>
     arrange(
         model, metric, type
     ) |>
     mutate(
-        text = glue("{signif(mean * 100,3)}±{signif(sd * 100, 3)} s.e.")
+        text = glue("{signif(mean * 100,3)}±{signif(se * 100, 3)} SE")
     )
 
 
