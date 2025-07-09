@@ -4,6 +4,7 @@ make-all:
 make-stats: extract-metrics
     Rscript analysis_scripts/training_time.R
     Rscript analysis_scripts/model_stats.R
+    quarto render analysis_scripts/annotation_overlap.qmd --to html
 
 make-plots: extract-metrics
     Rscript analysis_scripts/training_history_plot.R
@@ -32,4 +33,6 @@ render-table basename:
 extract-metrics:
     echo "Extracting metrics..."
     Rscript analysis_scripts/tidy_model_metrics.R
-    
+
+predict:
+    uv run python analysis_scripts/prediction.py   
