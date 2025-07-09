@@ -4,7 +4,7 @@ library(kableExtra)
 library(here)
 library(glue)
 
-best_orcaiv1_model <- read_csv(here("analysis_scripts", "output", "best_orcaiv1_model.csv"),
+best_orcaiv1_model <- read_csv(here("analysis_scripts", "output", "csv", "best_orcaiv1_model.csv"),
     col_types = cols(
         model = col_character(),
         architecture = col_character(),
@@ -80,4 +80,4 @@ kbl(confusion_table,
 ) |>
     pack_rows("filtered data", 1, 7) |>
     pack_rows("unfiltered data", 8, 14) |>
-    write_lines(file = here("analysis_scripts", "output", "confusion_table.tex"))
+    write_lines(file = here("analysis_scripts", "output", "tex", "confusion_table.tex"))

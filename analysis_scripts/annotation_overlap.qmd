@@ -115,7 +115,7 @@ all_annotations_overlaps <- all_annotations |>
 write_csv(
     all_annotations_overlaps |>
         select(-overlaps_with_list),
-    here("analysis_scripts", "output", "all_annotations_overlaps.csv")
+    here("analysis_scripts", "output", "csv", "all_annotations_overlaps.csv")
 )
 
 all_predictions_overlaps <- all_predictions |>
@@ -127,7 +127,7 @@ all_predictions_overlaps <- all_predictions |>
 write_csv(
     all_predictions_overlaps |>
         select(-overlaps_with_list),
-    here("analysis_scripts", "output", "all_predictions_overlaps.csv")
+    here("analysis_scripts", "output", "csv", "all_predictions_overlaps.csv")
 )
 
 ```
@@ -145,7 +145,7 @@ all_annotations_overlaps_summary <- all_annotations_overlaps |>
 
 write_csv(
     all_annotations_overlaps_summary,
-    here("analysis_scripts", "output", "all_annotations_overlaps_summary.csv")
+    here("analysis_scripts", "output", "csv", "all_annotations_overlaps_summary.csv")
 )
 
 kable(all_annotations_overlaps_summary, caption = "Annotations: Summary of Overlaps")
@@ -164,7 +164,7 @@ all_predictions_overlaps_summary <- all_predictions_overlaps |>
 
 write_csv(
     all_predictions_overlaps_summary,
-    here("analysis_scripts", "output", "all_predictions_overlaps_summary.csv")
+    here("analysis_scripts", "output", "csv", "all_predictions_overlaps_summary.csv")
 )
 
 kable(all_predictions_overlaps_summary, caption = "Predictions: Summary of Overlaps")
@@ -182,7 +182,7 @@ all_annotations_overlaps_duration <- all_annotations |>
 
 write_csv(
     all_annotations_overlaps_duration,
-    here("analysis_scripts", "output", "all_annotations_overlaps_duration.csv")
+    here("analysis_scripts", "output", "csv", "all_annotations_overlaps_duration.csv")
 )
 
 
@@ -196,7 +196,7 @@ all_annotations_overlaps_duration_summary <- all_annotations_overlaps_duration |
 
 write_csv(
     all_annotations_overlaps_duration_summary,
-    here("analysis_scripts", "output", "all_annotations_overlaps_duration_summary.csv")
+    here("analysis_scripts", "output", "csv", "all_annotations_overlaps_duration_summary.csv")
 )
 
 kable(all_annotations_overlaps_duration_summary, caption = "Annotations: Total overlap duration")
@@ -227,7 +227,7 @@ all_predictions_overlaps_duration <- all_predictions |>
 
 write_csv(
     all_predictions_overlaps_duration,
-    here("analysis_scripts", "output", "all_predictions_overlaps_duration.csv")
+    here("analysis_scripts", "output", "csv", "all_predictions_overlaps_duration.csv")
 )
 
 all_predictions_overlaps_duration_summary <- all_predictions_overlaps_duration |>
@@ -239,7 +239,7 @@ all_predictions_overlaps_duration_summary <- all_predictions_overlaps_duration |
 
 write_csv(
     all_predictions_overlaps_duration_summary,
-    here("analysis_scripts", "output", "all_predictions_overlaps_duration_summary.csv")
+    here("analysis_scripts", "output", "csv", "all_predictions_overlaps_duration_summary.csv")
 )
 
 kable(all_predictions_overlaps_duration_summary, caption = "Predictions: Total overlap duration")

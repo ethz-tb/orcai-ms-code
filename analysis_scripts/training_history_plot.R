@@ -3,7 +3,7 @@ library(patchwork)
 library(here)
 
 model_training_metrics <- read_csv(
-    here("analysis_scripts", "output", "model_training_metrics.csv"),
+    here("analysis_scripts", "output", "csv", "model_training_metrics.csv"),
     col_types = cols(
         model = col_character(),
         architecture = col_character(),
@@ -139,7 +139,7 @@ plot_all <- plot_loss + plot_MBA + plot_LR +
 
 ggsave(
     plot = plot_all,
-    here("analysis_scripts", "output", "fig2_training_history.pdf"),
+    here("analysis_scripts", "output", "figures", "fig2_training_history.pdf"),
     width = 183,
     height = 80,
     unit = "mm"
@@ -147,7 +147,7 @@ ggsave(
 
 ggsave(
     plot = plot_all,
-    here("analysis_scripts", "output", "training_history.png"),
+    here("analysis_scripts", "output", "figures", "fig2_training_history.png"),
     width = 183,
     height = 80,
     unit = "mm"

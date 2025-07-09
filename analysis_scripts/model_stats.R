@@ -4,7 +4,7 @@ library(glue)
 library(here)
 
 model_test_metrics <- read_csv(
-    here("analysis_scripts", "output", "model_test_metrics.csv"),
+    here("analysis_scripts", "output", "csv", "model_test_metrics.csv"),
     col_types = cols(
         model = col_character(),
         replicate = col_double(),
@@ -16,7 +16,7 @@ model_test_metrics <- read_csv(
 )
 
 best_model_metrics <- read_csv(
-    here("analysis_scripts", "output", "best_models_metrics.csv"),
+    here("analysis_scripts", "output", "csv", "best_models_metrics.csv"),
     col_types = cols(
         model = col_character(),
         replicate = col_double(),
@@ -60,5 +60,5 @@ model_metrics_summary <- model_metrics |>
     )
 
 
-write_excel_csv(model_metrics_summary, file = here("analysis_scripts", "output", "model_metrics_summary.csv"))
-write_excel_csv(best_orcaiv1, file = here("analysis_scripts", "output", "best_orcaiv1_model.csv"))
+write_excel_csv(model_metrics_summary, file = here("analysis_scripts", "output", "csv", "model_metrics_summary.csv"))
+write_excel_csv(best_orcaiv1, file = here("analysis_scripts", "output", "csv", "best_orcaiv1_model.csv"))

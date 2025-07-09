@@ -43,8 +43,6 @@ hps_trials <- hps_trials_raw |>
         `val MBA`, `val loss`
     )
 
-colnames(hps_trials)
-
 hps_trials |>
     arrange(desc(`val MBA`)) |>
     kbl(
@@ -57,4 +55,4 @@ hps_trials |>
     ) |>
     add_header_above(c("hyperparameter" = 5, " " = 1, "test data" = 2, "validation data" = 2)) |>
     row_spec(1, bold = TRUE) |>
-    write_lines(file = here("analysis_scripts", "output", "hps_trials_table.tex"))
+    write_lines(file = here("analysis_scripts", "output", "tex", "hps_trials_table.tex"))

@@ -4,7 +4,7 @@ library(kableExtra)
 library(here)
 library(glue)
 
-best_orcaiv1_model <- read_csv(here("analysis_scripts", "output", "best_orcaiv1_model.csv"),
+best_orcaiv1_model <- read_csv(here("analysis_scripts", "output", "csv", "best_orcaiv1_model.csv"),
     col_types = cols(
         model = col_character(),
         architecture = col_character(),
@@ -148,7 +148,7 @@ TP_table <- c(
     TP_table_footnote_2,
     PT_table_str[[1]][17]
 ) |>
-    write_lines(file = here("analysis_scripts", "output", "mc_table_TP.tex"))
+    write_lines(file = here("analysis_scripts", "output", "tex", "mc_table_TP.tex"))
 
 PT_table <- c(
     PT_table_str[[1]][2:16],
@@ -156,7 +156,7 @@ PT_table <- c(
     PT_table_footnote_2,
     PT_table_str[[1]][17]
 ) |>
-    write_lines(file = here("analysis_scripts", "output", "mc_table_PT.tex"))
+    write_lines(file = here("analysis_scripts", "output", "tex", "mc_table_PT.tex"))
 
 
 TP_PT_table <- c(
@@ -166,4 +166,4 @@ TP_PT_table <- c(
     combined_table_footnote_2,
     PT_table_str[[1]][17]
 ) |>
-    write_lines(file = here("analysis_scripts", "output", "mc_table_TP_PT.tex"))
+    write_lines(file = here("analysis_scripts", "output", "tex", "mc_table_TP_PT.tex"))

@@ -4,7 +4,7 @@ library(kableExtra)
 library(here)
 
 filtered_snippets_duration <- read_csv(
-    here("tvt_data_stats", "filtered_snippets_duration.csv"),
+    here("data", "filtered_snippets_duration.csv"),
     col_types = cols(
         ...1 = col_character(),
         train = col_time(format = ""),
@@ -35,4 +35,4 @@ filtered_snippets_duration |>
         booktabs = TRUE,
         linesep = ""
     ) |>
-    write_lines(file = here("analysis_scripts", "output", "filtered_snippets_duration.tex"))
+    write_lines(file = here("analysis_scripts", "output", "tex", "filtered_snippets_duration.tex"))
