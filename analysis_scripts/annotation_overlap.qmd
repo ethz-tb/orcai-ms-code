@@ -1,0 +1,260 @@
+---
+title: "OrcAI: Overlap of Annotations"
+format:
+  html:
+    toc: true
+    toc-location: left
+    code-fold: true
+    code-overflow: wrap
+    embed-resources: true
+knitr:
+  opts_chunk: 
+    fig-width: 12
+    fig-height: 7.5
+# execute:
+#   echo: false
+#   warning: false
+#   message: false
+title-meta: "OrcAI: Overlap of Annotations"
+author-meta: "Daniel Angst"
+---
+
+```{r}
+#| label: load packages & fns
+#| warning: false
+library(tidyverse)
+library(here)
+library(glue)
+library(jsonlite)
+library(knitr)
+library(ivs)
+
+source(here("analysis_scripts/annotation_overlap_fns.R"))
+```
+
+# Load data
+
+```{r}
+#| label: load data
+all_annotations <- read_csv(here("data/all_annotations.csv"),
+    col_types = cols(
+        recording = col_character(),
+        start = col_double(),
+        stop = col_double(),
+        label = col_character()
+    )
+)
+
+all_predictions <- read_csv(
+    here("data/all_predictions.csv"),
+    col_types = cols(
+        recording = col_character(),
+        start = col_double(),
+        stop = col_double(),
+        label = col_character(),
+        mean_p = col_double(),
+        label_source = col_character()
+    )
+)
+```
+
+# Annotations & Predictions
+
+```{r}
+#| label: annotation duration
+mean_annotation_duration <- all_annotations |>
+    ungroup() |>
+    mutate(
+        duration = stop - start
+    ) |>
+    group_by(
+        label
+    ) |>
+    summarize(
+        ens = n(),
+        min = min(duration),
+        max = max(duration),
+        mean = mean(duration),
+        sd = sd(duration),
+        se = sd / sqrt(ens)
+    )
+kable(mean_annotation_duration, caption = "Duration of Annotations by Type")
+```
+
+```{r}
+#| label: prediction duration
+mean_prediction_duration <- all_predictions |>
+    ungroup() |>
+    mutate(
+        duration = stop - start
+    ) |>
+    group_by(
+        label
+    ) |>
+    summarize(
+        ens = n(),
+        min = min(duration),
+        max = max(duration),
+        mean = mean(duration),
+        sd = sd(duration),
+        se = sd / sqrt(ens)
+    )
+kable(mean_prediction_duration, caption = "Duration of Predictions by Type")
+```
+
+# Overlaps
+```{r}
+#| label: count overlaps
+#| cache: true
+all_annotations_overlaps <- all_annotations |>
+    group_by(recording) |>
+    arrange(start, .by_group = TRUE) |>
+    mutate(
+        count_overlaps(start, stop)
+    )
+write_csv(
+    all_annotations_overlaps |>
+        select(-overlaps_with_list),
+    here("analysis_scripts", "output", "all_annotations_overlaps.csv")
+)
+
+all_predictions_overlaps <- all_predictions |>
+    group_by(recording) |>
+    arrange(start, .by_group = TRUE) |>
+    mutate(
+        count_overlaps(start, stop)
+    )
+write_csv(
+    all_predictions_overlaps |>
+        select(-overlaps_with_list),
+    here("analysis_scripts", "output", "all_predictions_overlaps.csv")
+)
+
+```
+
+```{r}
+#| label: annotations overlap summary
+all_annotations_overlaps_summary <- all_annotations_overlaps |>
+    ungroup() |>
+    select(-overlaps_with) |>
+    count(overlaps_with_n) |>
+    mutate(
+        total = sum(n),
+        percent = 100 * (n / sum(n))
+    )
+
+write_csv(
+    all_annotations_overlaps_summary,
+    here("analysis_scripts", "output", "all_annotations_overlaps_summary.csv")
+)
+
+kable(all_annotations_overlaps_summary, caption = "Annotations: Summary of Overlaps")
+```
+
+```{r}
+#| label: predictions overlap summary
+all_predictions_overlaps_summary <- all_predictions_overlaps |>
+    ungroup() |>
+    select(-overlaps_with) |>
+    count(overlaps_with_n) |>
+    mutate(
+        total = sum(n),
+        percent = 100 * (n / sum(n))
+    )
+
+write_csv(
+    all_predictions_overlaps_summary,
+    here("analysis_scripts", "output", "all_predictions_overlaps_summary.csv")
+)
+
+kable(all_predictions_overlaps_summary, caption = "Predictions: Summary of Overlaps")
+```
+
+```{r}
+#| label: annotation overlap duration
+all_annotations_overlaps_duration <- all_annotations |>
+    group_by(recording) |>
+    summarise(
+        annotation_duration = sum(stop - start),
+        overlap_duration = recording_overlap_duration(start, stop),
+        ratio = overlap_duration / annotation_duration
+    )
+
+write_csv(
+    all_annotations_overlaps_duration,
+    here("analysis_scripts", "output", "all_annotations_overlaps_duration.csv")
+)
+
+
+
+all_annotations_overlaps_duration_summary <- all_annotations_overlaps_duration |>
+    summarize(
+        total_annotation_duration = sum(annotation_duration),
+        total_overlap_duration = sum(all_annotations_overlaps_duration$overlap_duration),
+        ratio_with_overlap = total_overlap_duration / total_annotation_duration
+    )
+
+write_csv(
+    all_annotations_overlaps_duration_summary,
+    here("analysis_scripts", "output", "all_annotations_overlaps_duration_summary.csv")
+)
+
+kable(all_annotations_overlaps_duration_summary, caption = "Annotations: Total overlap duration")
+```
+
+```{r}
+#| label: annotation overlap duration figure
+#| fig-cap: "Distribution of overlap duration in annotations"
+
+ggplot(
+    data = all_annotations_overlaps_duration,
+    mapping = aes(x = overlap_duration)
+) +
+    geom_histogram(binwidth = 1) +
+    labs(x = "total duration with overlap [s]") +
+    theme_bw()
+```
+
+```{r}
+#| label: prediction overlap duration
+all_predictions_overlaps_duration <- all_predictions |>
+    group_by(recording) |>
+    summarise(
+        prediction_duration = sum(stop - start),
+        overlap_duration = recording_overlap_duration(start, stop),
+        ratio = overlap_duration / prediction_duration
+    )
+
+write_csv(
+    all_predictions_overlaps_duration,
+    here("analysis_scripts", "output", "all_predictions_overlaps_duration.csv")
+)
+
+all_predictions_overlaps_duration_summary <- all_predictions_overlaps_duration |>
+    summarize(
+        total_prediction_duration = sum(prediction_duration),
+        total_overlap_duration = sum(all_predictions_overlaps_duration$overlap_duration),
+        ratio_with_overlap = total_overlap_duration / total_prediction_duration
+    )
+
+write_csv(
+    all_predictions_overlaps_duration_summary,
+    here("analysis_scripts", "output", "all_predictions_overlaps_duration_summary.csv")
+)
+
+kable(all_predictions_overlaps_duration_summary, caption = "Predictions: Total overlap duration")
+```
+
+```{r}
+#| label: prediction overlap duration figure
+#| fig-cap: "Distribution of overlap duration in predictions"
+
+ggplot(
+    data = all_predictions_overlaps_duration,
+    mapping = aes(x = overlap_duration)
+) +
+    geom_histogram(binwidth = 1) +
+    labs(x = "total duration with overlap [s]") +
+    theme_bw()
+```
+

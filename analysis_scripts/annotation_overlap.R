@@ -2,127 +2,65 @@ library(tidyverse)
 library(here)
 library(glue)
 library(jsonlite)
+library(ivs)
 
-find_overlaps <- function(start, stop) {
-    # returns vector of indices that overlap, provided start and stop are ordered ascending by start!
-    overlaps_with_list <- list()
-    overlaps_with_n_list <- list()
-    for (i in seq_len(length(start))) {
-        # overlaps at end
-        overlaps_with_end <- which(start[-c(1:i)] < stop[i]) + i
-        # overlaps at beginning
-        overlaps_with_start <- which(stop[start < start[i]] > start[i])
+source(here("analysis_scripts/annotation_overlap_fns.R"))
 
-        overlaps_with <- c(overlaps_with_start, overlaps_with_end)
-        overlaps_with_n_list[[i]] <- length(overlaps_with)
-        overlaps_with_list[[i]] <- overlaps_with
-    }
-
-    return(
-        tibble(
-            overlaps_with_n = unlist(overlaps_with_n_list),
-            overlaps_with_str = map_chr(overlaps_with_list, \(x) str_c(x, collapse = ", ")),
-            overlaps_with = overlaps_with_list
-        )
-    )
-}
-
-# test_set <- tibble(
-#     start = c(1, 2, 4, 6, 7),
-#     stop = c(3, 5, 8, 10, 9)
-# )
-
-# test_set |>
-#     mutate(
-#         find_overlaps(start, stop)
-#     )
-
-
-recording_table <- read_csv(
-    file = "/Volumes/4TB/orcai_project/orca_recordings/recording_table.csv",
+all_annotations <- read_csv(here("data/all_annotations.csv"),
     col_types = cols(
         recording = col_character(),
-        channel = col_double(),
-        duplicate = col_logical(),
-        base_dir_recording = col_character(),
-        rel_recording_path = col_character(),
-        base_dir_annotation = col_character(),
-        rel_annotation_path = col_character(),
-        CS = col_logical(),
-        HFW = col_logical(),
-        IGNORE = col_logical(),
-        NOLABEL = col_logical(),
-        Unlabelled = col_logical(),
-        BR = col_logical(),
-        BUZZ = col_logical(),
-        HERDING = col_logical(),
-        PHS = col_logical(),
-        SS = col_logical(),
-        TAILSLAP = col_logical(),
-        WHISTLE = col_logical()
+        start = col_double(),
+        stop = col_double(),
+        label = col_character()
     )
-) |>
-    filter(!is.na(base_dir_annotation)) |>
-    rowwise() |>
-    mutate(
-        has_signal = any(BR, BUZZ, HERDING, PHS, SS, TAILSLAP, WHISTLE)
-    ) |>
-    filter(
-        has_signal
-    ) |>
-    mutate(
-        annotation_path = here(base_dir_annotation, rel_annotation_path)
-    ) |>
-    select(
-        recording, channel,
-        annotation_path,
-        BR, BUZZ, HERDING, PHS, SS, TAILSLAP, WHISTLE
-    )
-
-all_annotations_list <- list()
-
-for (i in seq_len(dim(recording_table)[1])) {
-    all_annotations_list[[i]] <- read_tsv(
-        recording_table$annotation_path[i],
-        col_names = c("start", "stop", "origlabel"),
-        col_types = "ddc"
-    ) |>
-        arrange(start) |>
-        mutate(recording = recording_table$recording[i], .before = "start")
-}
-
-call_equivalences_json <- read_json(here("input_parameter/call_equivalences.json"))
-call_equivalences <- tibble(
-    origlabel = names(call_equivalences_json),
-    label = unlist(call_equivalences_json)
 )
 
-all_annotations <- bind_rows(all_annotations_list) |>
-    left_join(call_equivalences, by = join_by(origlabel)) |>
-    filter(label %in% c("BR", "BUZZ", "HERDING", "PHS", "SS", "TAILSLAP", "WHISTLE")) |>
-    select(-origlabel)
+all_predictions <- read_csv(
+    here("data/all_predictions.csv"),
+    col_types = cols(
+        recording = col_character(),
+        start = col_double(),
+        stop = col_double(),
+        label = col_character(),
+        mean_p = col_double(),
+        label_source = col_character()
+    )
+)
+
 
 all_annotations_overlaps <- all_annotations |>
     group_by(recording) |>
     arrange(start, .by_group = TRUE) |>
     mutate(
-        find_overlaps(start, stop)
+        count_overlaps(start, stop)
+    )
+
+all_predictions_overlaps <- all_predictions |>
+    group_by(recording) |>
+    arrange(start, .by_group = TRUE) |>
+    mutate(
+        count_overlaps(start, stop)
     )
 
 write_csv(
     all_annotations_overlaps |>
-        select(-overlaps_with),
+        select(-overlaps_with_list),
     here("analysis_scripts", "output", "all_annotations_overlaps.csv")
 )
 
-all_annotations_overlaps |>
+all_annotations_overlaps_summary <- all_annotations_overlaps |>
     ungroup() |>
     select(-overlaps_with) |>
     count(overlaps_with_n) |>
     mutate(
         total = sum(n),
-        percent = n / sum(n)
+        percent = 100 * (n / sum(n))
     )
+
+write_csv(
+    all_annotations_overlaps_summary,
+    here("analysis_scripts", "output", "all_annotations_overlaps_summary.csv")
+)
 
 ggplot(
     data = all_annotations_overlaps,
@@ -131,6 +69,32 @@ ggplot(
     geom_histogram(binwidth = 1) +
     scale_x_continuous(name = "overlaps with n", breaks = 0:6) +
     theme_bw()
+
+# overlap duration
+all_annotations_overlaps_duration <- all_annotations |>
+    group_by(recording) |>
+    summarise(
+        annotation_duration = sum(stop - start),
+        overlap_duration = snippet_overlap_duration(start, stop),
+        ratio = overlap_duration / annotation_duration
+    )
+
+write_csv(
+    all_annotations_overlaps_duration,
+    here("analysis_scripts", "output", "all_annotations_overlaps_duration.csv")
+)
+
+all_annotations_overlaps_duration_summary <- all_annotations_overlaps_duration |>
+    summarize(
+        total_annotation_duration = sum(annotation_duration),
+        total_overlap_duration = sum(all_annotations_overlaps_duration$overlap_duration),
+        ratio_with_overlap = total_overlap_duration / total_annotation_duration
+    )
+
+write_csv(
+    all_annotations_overlaps_duration_summary,
+    here("analysis_scripts", "output", "all_annotations_overlaps_duration_summary.csv")
+)
 
 # annotation duration
 
