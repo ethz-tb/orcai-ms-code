@@ -26,8 +26,8 @@ make-pdf-tables: make-tables
     just render-table all_ms_tables
 
 render-table basename:
-    pdflatex -output-directory analysis_scripts/output analysis_scripts/{{basename}}.tex
-    rm analysis_scripts/output/{{basename}}.aux analysis_scripts/output/{{basename}}.log
+    pdflatex -output-directory analysis_scripts/output/tables analysis_scripts/tex_intermediates/{{basename}}.tex
+    rm analysis_scripts/output/tables/{{basename}}.aux analysis_scripts/output/tables/{{basename}}.log
 
 extract-metrics:
     echo "Extracting metrics..."
