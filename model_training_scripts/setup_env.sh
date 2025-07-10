@@ -6,4 +6,5 @@ python -m venv venv
 source venv/bin/activate
 
 pip install -U git+https://github.com/ethz-tb/orcAI.git
+pip install -U tensorrt
 orcai --version

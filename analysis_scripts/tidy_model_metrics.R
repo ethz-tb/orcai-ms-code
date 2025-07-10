@@ -26,17 +26,19 @@ for (i in seq_along(model_paths)) {
             .before = MBA
         )
 
-    # test data for final model
+    # test data
+    model_test_metrics_list[[i]] <- read_json(here(model_paths[i], "test", "test_data_metrics.json")) |>
+        as_tibble() |>
+        mutate(
+            model = model_name,
+            replicate = replicate,
+            architecture = model_info$architecture,
+            type = "test_filtered",
+            .before = "MBA"
+        )
+
+    # test data for unfiltered dataset for final model
     if (model_name == "orcai-v1") {
-        model_test_metrics_list[[i]] <- read_json(here(model_paths[i], "test", "test_data_metrics.json")) |>
-            as_tibble() |>
-            mutate(
-                model = model_name,
-                replicate = replicate,
-                architecture = model_info$architecture,
-                type = "test_filtered",
-                .before = "MBA"
-            )
         model_unfiltered_test_metrics_list[[i]] <- read_json(
             here(
                 model_paths[i], "test", "test_unfiltered_dataset_metrics.json"
