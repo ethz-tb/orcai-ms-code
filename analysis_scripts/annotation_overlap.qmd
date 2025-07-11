@@ -185,8 +185,6 @@ write_csv(
     here("analysis_scripts", "output", "csv", "all_annotations_overlaps_duration.csv")
 )
 
-
-
 all_annotations_overlaps_duration_summary <- all_annotations_overlaps_duration |>
     summarize(
         total_annotation_duration = sum(annotation_duration),
