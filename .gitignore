@@ -10,9 +10,13 @@ hyperparameter_search/orcai-v1-3750-LSTM_HPS/hps_logs/orcai-v1-3750-LSTM_HPS
 # ignore output files
 analysis_scripts/output/csv/*.*
 analysis_scripts/output/figures/*.*
+analysis_scripts/output/figures/annotations/*.*
 analysis_scripts/output/tables/*.*
 analysis_scripts/output/tex/*.*
 # ignore quarto
 analysis_scripts/annotation_overlap_cache
 analysis_scripts/annotation_overlap_files
 analysis_scripts/annotation_overlap.html
+
+# python cache
+__pycache__/
