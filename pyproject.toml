@@ -6,9 +6,11 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "ipython>=9.3.0",
+    "matplotlib>=3.10.3",
     "orcai",
     "pydot>=4.0.1",
     "ruff>=0.12.1",
+    "tqdm>=4.67.1",
 ]
 
 [tool.uv.sources]
