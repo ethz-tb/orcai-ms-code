@@ -14,6 +14,22 @@ model_training_metrics <- read_csv(
         value = col_double()
     )
 )
+
+best_models_test_metrics <- read_csv(
+    here("analysis_scripts", "output", "csv", "best_models_metrics.csv"),
+    col_types = cols(
+        model = col_character(),
+        replicate = col_double(),
+        architecture = col_character(),
+        type = col_character(),
+        metric = col_character(),
+        value = col_double()
+    )
+) |>
+    filter(
+        type == "test_filtered"
+    )
+
 common_theme <- theme_bw() + theme(
     text = element_text(size = 7),
     legend.margin = margin(),
@@ -72,6 +88,9 @@ plot_loss <- model_training_metrics |>
         )
     ) +
     geom_line() +
+    geom_point(
+        data = best_models_test_metrics |> filter(model != "orcai-v1", metric == "loss"),
+    ) +
     scale_linetype_manual(values = type_lines, name = "", guide = guide_legend(order = 2)) +
     scale_colour_manual(values = model_colors, name = "", guide = guide_legend(order = 1)) +
     scale_alpha_manual(values = replicate_alpha, name = "", guide = "none") +
@@ -100,6 +119,9 @@ plot_MBA <- model_training_metrics |>
         )
     ) +
     geom_line() +
+    geom_point(
+        data = best_models_test_metrics |> filter(model != "orcai-v1", metric == "MBA"),
+    ) +
     scale_linetype_manual(values = type_lines, name = "") +
     scale_colour_manual(values = model_colors, name = "") +
     scale_alpha_manual(values = replicate_alpha, name = "", guide = "none") +

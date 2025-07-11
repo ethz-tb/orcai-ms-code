@@ -57,13 +57,13 @@ for (i in seq_along(model_paths)) {
 
 model_training_metrics_wide <- bind_rows(model_training_metrics_list)
 
-best_models_metrics_wide <- model_training_metrics_wide |>
+best_models_training_metrics_wide <- model_training_metrics_wide |>
     group_by(model, replicate, architecture) |>
     filter(
         val_MBA == max(val_MBA)
     )
 
-best_models_metrics_train <- best_models_metrics_wide |>
+best_models_training_metrics_train <- best_models_training_metrics_wide |>
     select(
         model, architecture, replicate, epoch, loss, MBA, learning_rate
     ) |>
@@ -74,7 +74,7 @@ best_models_metrics_train <- best_models_metrics_wide |>
     ) |>
     mutate(type = "training", .before = "metric")
 
-best_models_metrics_val <- best_models_metrics_wide |>
+best_models_training_metrics_val <- best_models_training_metrics_wide |>
     select(
         model, architecture, replicate, epoch, val_loss, val_MBA
     ) |>
@@ -85,8 +85,7 @@ best_models_metrics_val <- best_models_metrics_wide |>
         values_to = "value"
     ) |>
     mutate(type = "validation", .before = "metric")
-
-best_models_metrics <- bind_rows(best_models_metrics_train, best_models_metrics_val)
+best_models_training_metrics <- bind_rows(best_models_training_metrics_train, best_models_training_metrics_val)
 
 model_training_metrics_train <- model_training_metrics_wide |>
     select(
@@ -110,18 +109,32 @@ model_training_metrics_val <- model_training_metrics_wide |>
         values_to = "value"
     ) |>
     mutate(type = "validation", .before = "metric")
-
 model_training_metrics <- bind_rows(model_training_metrics_train, model_training_metrics_val)
 
-model_test_metrics_wide <- bind_rows(model_test_metrics_list, model_unfiltered_test_metrics_list)
-model_test_metrics <- model_test_metrics_wide |>
+best_models_test_metrics_wide <- bind_rows(model_test_metrics_list, model_unfiltered_test_metrics_list)
+best_models_test_metrics <- best_models_test_metrics_wide |>
     pivot_longer(
-        !c(model, replicate, architecture, type),
+        !c(model, architecture, replicate, type),
         names_to = "metric",
         values_to = "value"
+    ) |>
+    left_join(
+        best_models_training_metrics |>
+            select(model, replicate, architecture, epoch) |>
+            distinct(),
+        by = join_by(model, replicate, architecture)
+    ) |>
+    select(model, architecture, replicate, epoch, type, metric, value)
+
+best_models_metrics <- bind_rows(best_models_training_metrics, best_models_test_metrics) |>
+    arrange(
+        model, architecture, replicate, epoch, type, metric
     )
 
 # save
-write_excel_csv(model_training_metrics, file = here("analysis_scripts", "output", "csv", "model_training_metrics.csv"))
-write_excel_csv(model_test_metrics, file = here("analysis_scripts", "output", "csv", "model_test_metrics.csv"))
-write_excel_csv(best_models_metrics, file = here("analysis_scripts", "output", "csv", "best_models_metrics.csv"))
+write_excel_csv(model_training_metrics,
+    file = here("analysis_scripts", "output", "csv", "model_training_metrics.csv")
+)
+write_excel_csv(best_models_metrics,
+    file = here("analysis_scripts", "output", "csv", "best_models_metrics.csv")
+)
