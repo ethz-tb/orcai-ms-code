@@ -90,6 +90,7 @@ for i, label in (pbar := tqdm(enumerate(CALLS), total=len(CALLS))):
             figure_title=figure_title,
             draw_x_axis_label=draw_x_axis_label,
             draw_y_axis_label=draw_y_axis_label,
+            draw_recording_label=True,
         )
         if col_index == 0:
             subfigures[row_index, col_index].text(

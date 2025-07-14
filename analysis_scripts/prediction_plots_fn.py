@@ -55,7 +55,9 @@ class AnnotationPlotAesthetics:
     annotation_line_width: float = 2
     annotation_line_style: str = "solid"
 
-    y_axis_label_x_offset: float = -0.2
+    recording_label_fontsize: int = 5
+    recording_label_y: float = 0.95
+
 
     call_colors: dict = field(default_factory=lambda: CALL_COLORS)
 
@@ -160,6 +162,7 @@ def spectrogram_plot(
     plot_data: AnnotationPlotData,
     draw_y_ticks=True,
     draw_y_label=False,
+    draw_recording_label=False,
 ):
     """
     Plot the spectrogram on the given axes.
@@ -195,6 +198,14 @@ def spectrogram_plot(
         ],
         cmap=plot_data.aesthetics.spectrogram_cmap,
     )
+    if draw_recording_label:
+        ax.set_title(
+            plot_data.sampled_call.recording,
+            y=plot_data.aesthetics.recording_label_y,
+            loc="left",
+            fontstyle="oblique",
+            fontsize=plot_data.aesthetics.recording_label_fontsize,
+        )
 
     return im
 
@@ -329,6 +340,7 @@ def annotation_figure(
     draw_y_axis_label: bool = True,
     draw_x_ticks: bool = True,
     draw_x_axis_label: bool = True,
+    draw_recording_label: bool = False,
 ):
     """
     Create a figure with the spectrogram, annotated labels, and prediction probabilities.
@@ -341,6 +353,7 @@ def annotation_figure(
         plot_data,
         draw_y_ticks=draw_y_ticks,
         draw_y_label=draw_y_axis_label,
+        draw_recording_label=draw_recording_label,
     )
     spectrogram_ax = annotation_plot_region(spectrogram_ax, plot_data)
 
