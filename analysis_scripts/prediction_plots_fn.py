@@ -126,7 +126,7 @@ class AnnotationPlotData:
             mono=False,
         )
         if wav_file.ndim > 1:
-            wav_file = wav_file[sampled_call.channel]
+            wav_file = wav_file[sampled_call.channel - 1]
 
         spectrogram, frequencies, times = calculate_spectrogram(
             wav_file,
