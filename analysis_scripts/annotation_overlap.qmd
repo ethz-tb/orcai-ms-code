@@ -76,9 +76,31 @@ mean_annotation_duration <- all_annotations |>
         max = max(duration),
         mean = mean(duration),
         sd = sd(duration),
-        se = sd / sqrt(ens)
-    )
-kable(mean_annotation_duration, caption = "Duration of Annotations by Type")
+        se = sd / sqrt(ens),
+        margin = qt(0.975, df = ens - 1) * se,
+        ci95_lower = mean - margin,
+        ci95_upper = mean + margin
+    ) |>
+    select(-margin)
+
+all_annotations |>
+    ungroup() |>
+    mutate(
+        duration = stop - start
+    ) |>
+    group_by(
+        label
+    ) |>
+    ggplot(
+        mapping = aes(y = duration, x = label)
+    ) +
+    geom_violin(
+        bounds = c(0, Inf),
+        draw_quantiles = c(0.25, 0.5, 0.75)
+    ) +
+    theme_bw()
+
+kable(mean_annotation_duration, caption = "Duration of Annotations by Type", digits = 3)
 ```
 
 ```{r}
@@ -97,9 +119,13 @@ mean_prediction_duration <- all_predictions |>
         max = max(duration),
         mean = mean(duration),
         sd = sd(duration),
-        se = sd / sqrt(ens)
-    )
-kable(mean_prediction_duration, caption = "Duration of Predictions by Type")
+        se = sd / sqrt(ens),
+        margin = qt(0.975, df = ens - 1) * se,
+        ci95_lower = mean - margin,
+        ci95_upper = mean + margin
+    ) |>
+    select(-margin)
+kable(mean_prediction_duration, caption = "Duration of Predictions by Type", digits = 3)
 ```
 
 # Overlaps
