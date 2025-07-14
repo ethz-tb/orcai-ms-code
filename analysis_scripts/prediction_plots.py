@@ -13,7 +13,7 @@ from prediction_plots_fn import (
 )
 from sample_predictions import (
     BINS_LABELS,
-    N_CALLS,
+    N_PREDICTIONS,
 )
 from tqdm import tqdm
 
@@ -62,7 +62,9 @@ for i, label in tqdm(enumerate(CALLS), total=len(CALLS), desc="Plotting"):
         aesthetics=AnnotationPlotAesthetics(time_limits=[0, 1]),
     )
     subfigure = figure.add_subfigure(gridspec[0, 0])
-    subfigures = subfigure.subfigures(N_CALLS, len(BINS_LABELS), hspace=0, wspace=0)
+    subfigures = subfigure.subfigures(
+        N_PREDICTIONS, len(BINS_LABELS), hspace=0, wspace=0
+    )
 
     for i, sampled_call in tqdm(
         enumerate(sampled_calls_label.itertuples(index=False)),
@@ -83,7 +85,7 @@ for i, label in tqdm(enumerate(CALLS), total=len(CALLS), desc="Plotting"):
         figure_title = BINS_LABELS[col_index] if row_index == 0 else None
 
         draw_x_axis_label = i == (len(sampled_calls_label) - 1) or row_index == (
-            N_CALLS - 1
+            N_PREDICTIONS - 1
         )
         draw_y_axis_label = col_index == 0
 

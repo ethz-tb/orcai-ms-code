@@ -7,7 +7,7 @@ from prediction_plots_fn import (
     filter_calls,
 )
 
-N_CALLS = 5  # Number of calls to sample from each bin
+N_PREDICTIONS = 5  # Number of calls to sample from each bin
 BINS = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 BINS_LABELS = [
     "(0.5-0.6]",
@@ -67,7 +67,10 @@ all_predicted_calls_filtered.groupby(
 
 sampled_calls = (
     all_predicted_calls_filtered.groupby(["label", "mean_p_bin"], observed=True)
-    .apply(lambda x: x.sample(min(5, len(x)), random_state=rng), include_groups=False)
+    .apply(
+        lambda x: x.sample(min(N_PREDICTIONS, len(x)), random_state=rng),
+        include_groups=False,
+    )
     .reset_index()
 )
 
