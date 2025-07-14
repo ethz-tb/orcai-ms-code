@@ -48,6 +48,8 @@ class AnnotationPlotAesthetics:
     prediction_y_label: str = "$p$"
     prediction_line_alpha: float = 0.5
 
+    y_axis_label_x_offset: float = -0.2
+
     label_region_line_alpha: float = 0.5
     label_region_line_width: float = 1
 
@@ -58,6 +60,8 @@ class AnnotationPlotAesthetics:
     recording_label_fontsize: int = 5
     recording_label_y: float = 0.95
 
+    suptitle_fontsize: int = 8
+    suptitle_y: float = 1.0
 
     call_colors: dict = field(default_factory=lambda: CALL_COLORS)
 
@@ -87,6 +91,8 @@ class AnnotationPlotData:
         all_predicted_calls,
         call_equivalences,
         spectrogram_parameter,
+        sample_extension_absolute=5,
+        sample_extension_relative=0.0,
         calls=CALLS,  # calls is accessed in query below
         **aesthetics,
     ):
@@ -96,8 +102,12 @@ class AnnotationPlotData:
         )
         annotations_path = recording_path.with_suffix(".txt")
 
-        sample_start = max(sampled_call.start - 5, 0)
-        sample_end = sampled_call.stop + 5
+        sample_start = (max(sampled_call.start - sample_extension_absolute, 0)) * (
+            1 - sample_extension_relative
+        )
+        sample_end = (sampled_call.stop + sample_extension_absolute) * (
+            1 + sample_extension_relative
+        )
         sample_duration = sample_end - sample_start
         sample_probabilities = pd.read_csv(probabilities_path).query(
             "time >= @sample_start and time <= @sample_end"
@@ -378,7 +388,12 @@ def annotation_figure(
     # handles, labels = prediction_ax.get_legend_handles_labels()
     # figure.legend(handles, labels, ncols=len(calls), loc="lower center")
     if figure_title is not None:
-        figure.suptitle(figure_title, fontweight="bold")
+        figure.suptitle(
+            figure_title,
+            fontweight="bold",
+            fontsize=plot_data.aesthetics.suptitle_fontsize,
+            y=plot_data.aesthetics.suptitle_y,
+        )
 
     return figure
 

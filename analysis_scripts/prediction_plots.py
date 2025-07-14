@@ -50,8 +50,7 @@ rc(
     },
 )
 
-for i, label in (pbar := tqdm(enumerate(CALLS), total=len(CALLS))):
-    pbar.set_description(f"plotting predictions {label}")
+for i, label in tqdm(enumerate(CALLS), total=len(CALLS), desc="Plotting"):
     sampled_calls_label = sampled_calls.query("label == @label")
     figure, axs = plt.subplots(
         2, 1, height_ratios=[20, 1], figsize=figure_size, dpi=300, layout="constrained"
@@ -64,9 +63,11 @@ for i, label in (pbar := tqdm(enumerate(CALLS), total=len(CALLS))):
     )
     subfigure = figure.add_subfigure(gridspec[0, 0])
     subfigures = subfigure.subfigures(N_CALLS, len(BINS_LABELS), hspace=0, wspace=0)
+
     for i, sampled_call in tqdm(
         enumerate(sampled_calls_label.itertuples(index=False)),
         total=len(sampled_calls_label),
+        desc=label,
         leave=False,
     ):
         plot_data = AnnotationPlotData.from_sampled_call(
@@ -74,6 +75,8 @@ for i, label in (pbar := tqdm(enumerate(CALLS), total=len(CALLS))):
             all_predicted_calls,
             call_equivalences,
             plot_spectrogram_parameter,
+            sample_extension_absolute=5,
+            sample_extension_relative=0,
         )
         col_index = sampled_call.mean_p_bin_index
         row_index = sampled_call.sample_index
@@ -103,7 +106,7 @@ for i, label in (pbar := tqdm(enumerate(CALLS), total=len(CALLS))):
                 fontweight="bold",
                 fontsize=8,
             )
-
+    figure.suptitle(f"Predictions for {label}", fontweight="bold")
     figure.savefig(
         Path(
             "analysis_scripts/output/figures/annotations",
