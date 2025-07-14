@@ -76,9 +76,11 @@ sampled_calls = sampled_calls.join(
     on="recording",
     how="left",
 )
+
 sampled_calls["sample_index"] = sampled_calls.groupby(
     ["label", "mean_p_bin"], observed=True
 ).cumcount()
+
 sampled_calls["mean_p_bin_index"] = (
     sampled_calls["mean_p_bin"].astype("category").cat.codes
 )
@@ -86,15 +88,11 @@ sampled_calls["mean_p_bin_index"] = (
 # with pd.option_context('display.max_rows', None):
 #     print(sampled_calls)
 
-
 # print(f"Total sampled calls: {len(sampled_calls)}")
 # print("Samples per group:")
 # print(sampled_calls.groupby(["label", "mean_p_bin"], observed=True).size().sort_index())
 
 all_predicted_calls_filtered.to_csv(
     Path("analysis_scripts", "output", "csv", "all_predicted_calls.csv"),
-    index=False,
 )
-sampled_calls.to_csv(
-    Path("analysis_scripts", "output", "csv", "sampled_calls.csv"), index=False
-)
+sampled_calls.to_csv(Path("analysis_scripts", "output", "csv", "sampled_calls.csv"))
