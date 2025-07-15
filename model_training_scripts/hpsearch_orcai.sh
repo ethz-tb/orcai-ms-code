@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 #SBATCH --job-name=orcai-hpsearch
-#SBATCH --output=/cluster/home/angstd/orcAI/20250428_orcai/logs/hpsearch_%j.log
+#SBATCH --output=/cluster/home/angstd/orcAI/hyperparameter_search/logs/hpsearch.log
 #SBATCH --tmp=120G
 
 #SBATCH --gpus=4
@@ -24,7 +24,7 @@ echo -e "\nrunning $unzip_cmd\n"
 eval $unzip_cmd
 
 data_dir="$TMPDIR/tvt_data"
-output_dir="/cluster/home/angstd/orcAI/20250428_orcai"
+output_dir="/cluster/home/angstd/orcAI/hyperparameter_search"
 parameter_file="$output_dir/orcai_parameter_HPS.json"
 hps_parameter_file="$output_dir/hps_parameter.json"
 
