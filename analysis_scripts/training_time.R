@@ -30,7 +30,7 @@ training_times_list <- list()
 
 for (i in seq_along(model_paths)) {
     model_info <- read_json(here(model_paths[i], "orcai_parameter.json"))
-    log_path <- list.files(here(model_paths[i], "logs"), pattern = "training_output_.+\\.log", full.names = TRUE)[1]
+    log_path <- list.files(here(model_paths[i], "logs"), pattern = "training_output.log", full.names = TRUE)[1]
     log <- readLines(log_path)
     training_times_list[[i]] <- extract_training_times_from_log(log) |>
         mutate(
