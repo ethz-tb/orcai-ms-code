@@ -1,10 +1,10 @@
 #!/usr/bin/bash
-#SBATCH --job-name=orcai-v1-3750-LSTM_3
-#SBATCH --output=/cluster/home/angstd/orcAI/20250627_orcai/orcai-v1-3750-LSTM_3/logs/training_output_%j.log
+#SBATCH --job-name=LSTM_3
+#SBATCH --output=/cluster/home/angstd/orcAI/orcai-v1-3750-LSTM_3/logs/training_output.log
 #SBATCH --tmp=120G
 
 #SBATCH --gpus=1
-#SBATCH --time=48:00:00
+#SBATCH --time=20:00:00
 #SBATCH --mem-per-cpu=24g
 #SBATCH --gres=gpumem:24g
 module load stack/2024-06 gcc/12.2.0 openblas/0.3.24 cuda/12.4.1 python_cuda/3.11.6 py-pip
@@ -23,8 +23,8 @@ unzip_cmd="unzip $TMPDIR/$filename -d $TMPDIR"
 echo -e "\nrunning $unzip_cmd\n"
 eval $unzip_cmd
 
-data_dir="$TMPDIR"
-output_dir="/cluster/home/angstd/orcAI/20250627_orcai"
+data_dir="$TMPDIR/tvt_data"
+output_dir="/cluster/home/angstd/orcAI"
 parameter_file="$output_dir/orcai_parameter_LSTM_init_3.json"
 
 orcai_train_cmd="orcai train $data_dir $output_dir -p $parameter_file"

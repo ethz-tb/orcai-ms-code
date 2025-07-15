@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 #SBATCH --job-name=orcai-hpsearch
 #SBATCH --output=/cluster/home/angstd/orcAI/20250428_orcai/logs/hpsearch_%j.log
-#SBATCH --tmp=80G
+#SBATCH --tmp=120G
 
 #SBATCH --gpus=4
 #SBATCH --time=96:00:00
@@ -23,7 +23,7 @@ unzip_cmd="unzip $TMPDIR/$filename -d $TMPDIR"
 echo -e "\nrunning $unzip_cmd\n"
 eval $unzip_cmd
 
-data_dir="$TMPDIR"
+data_dir="$TMPDIR/tvt_data"
 output_dir="/cluster/home/angstd/orcAI/20250428_orcai"
 parameter_file="$output_dir/orcai_parameter_HPS.json"
 hps_parameter_file="$output_dir/hps_parameter.json"

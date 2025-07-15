@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 #SBATCH --job-name=orcai-v1_3
-#SBATCH --output=/cluster/home/angstd/orcAI/orcai-v1_3/logs/training_output_%j.log
+#SBATCH --output=/cluster/home/angstd/orcAI/orcai-v1_3/logs/training_output.log
 #SBATCH --tmp=120G
 
 #SBATCH --gpus=1
@@ -23,7 +23,7 @@ unzip_cmd="unzip $TMPDIR/$filename -d $TMPDIR"
 echo -e "\nrunning $unzip_cmd\n"
 eval $unzip_cmd
 
-data_dir="$TMPDIR"
+data_dir="$TMPDIR/tvt_data"
 output_dir="/cluster/home/angstd/orcAI"
 parameter_file="$output_dir/orcai_parameter_v1_3.json"
 
