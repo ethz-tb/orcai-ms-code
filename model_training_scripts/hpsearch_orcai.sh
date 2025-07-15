@@ -4,7 +4,7 @@
 #SBATCH --tmp=120G
 
 #SBATCH --gpus=4
-#SBATCH --time=96:00:00
+#SBATCH --time=6-12:00:00
 #SBATCH --mem-per-cpu=24g
 #SBATCH --gres=gpumem:24g
 module load stack/2024-06 gcc/12.2.0 openblas/0.3.24 cuda/12.4.1 python_cuda/3.11.6 py-pip
