@@ -7,6 +7,7 @@
 #SBATCH --time=48:00:00
 #SBATCH --mem-per-cpu=24g
 #SBATCH --gres=gpumem:24g
+#SBATCH --mail-type=BEGIN,END
 module load stack/2024-06 gcc/12.2.0 openblas/0.3.24 cuda/12.4.1 python_cuda/3.11.6 py-pip
 export XLA_FLAGS=--xla_gpu_cuda_data_dir=$CUDA_EULER_ROOT
 export CUDA_DIR=$CUDA_EULER_ROOT
