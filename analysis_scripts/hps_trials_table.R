@@ -4,7 +4,7 @@ library(knitr)
 library(kableExtra)
 
 hps_trials_raw <- read_csv(
-    here("hyperparameter_search", "orcai-v1-3750-LSTM_HPS", "hps_logs", "all_trials.csv"),
+    here("hyperparameter_search", "hps_logs", "all_trials.csv"),
     col_types = cols(
         filters = col_character(),
         kernel_size = col_double(),
