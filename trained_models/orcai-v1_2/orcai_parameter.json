@@ -11,8 +11,8 @@
             60
         ],
         "conv_initializer": "he_normal",
-        "kernel_size": 3,
-        "dropout_rate": 0.5,
+        "kernel_size": 5,
+        "dropout_rate": 0.3,
         "lstm_units": 128,
         "lstm_initializer": "glorot_uniform",
         "n_batch_train": 3750,
