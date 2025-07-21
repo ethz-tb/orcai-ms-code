@@ -46,6 +46,12 @@ unfiltered_dataset_TP <- here(
         ` ` = "annotated signal"
     )
 
+write_csv(
+    unfiltered_dataset_TP |>
+        mutate(across(where(is.numeric), \(x) round(x, digits = 4))),
+    here("analysis_scripts", "output", "csv", "missclassification_unfiltered_TP.csv")
+)
+
 unfiltered_dataset_PT <- here(
     "trained_models", glue("orcai-v1_{best_replicate}"), "test",
     "test_unfiltered_dataset_misclassification_table_pred_true.csv"
@@ -74,6 +80,12 @@ unfiltered_dataset_PT <- here(
         ),
         ` ` = "predicted signal"
     )
+
+write_csv(
+    unfiltered_dataset_PT |>
+        mutate(across(where(is.numeric), \(x) round(x, digits = 4))),
+    here("analysis_scripts", "output", "csv", "missclassification_unfiltered_PT.csv")
+)
 
 TP_table_raw <- unfiltered_dataset_TP |>
     kbl(
