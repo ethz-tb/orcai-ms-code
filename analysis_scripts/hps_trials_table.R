@@ -48,7 +48,7 @@ hps_trials |>
     kbl(
         format = "latex", digits = 4,
         col.names = c(
-            "filters", "kernel size", "dropout rate", "batch size", "lstm units",
+            "filters", "kernel", "dropout", "batch", "lstm",
             "epochs", "MBA", "loss", "MBA", "loss"
         ),
         booktabs = TRUE
