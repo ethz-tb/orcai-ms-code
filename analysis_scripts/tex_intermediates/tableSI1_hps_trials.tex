@@ -1,5 +1,5 @@
 \documentclass[11pt]{article}
-\usepackage[a4paper, landscape, margin=1.5cm]{geometry}
+\usepackage[a4paper, margin=1.5cm]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage{booktabs}
 \usepackage{tabularx}
@@ -7,11 +7,16 @@
 \usepackage{graphicx}
 \usepackage{caption}
 
+\DeclareCaptionFormat{custom}{\textbf{#1 #2 }#3}
+\DeclareCaptionLabelSeparator{custom}{--}
+\DeclareCaptionLabelFormat{custom}{#1 SI#2}
+\captionsetup{format=custom, labelsep=custom, labelformat=custom}
+
 \begin{document}
 \pagestyle{empty}
 \begin{table}[h]
     \centering
-    \caption*{\textbf{Table SI1} -- Results from hyperparameter search. The table shows the tested hyperparameters, the number of epochs the respective model was trained for and the masked binary accuracy (MBA) on both the training and validation data. Models are sorted by their MBA on the validation data. The best performing model is highlighted in bold. Note that the hyperparameter search was performed using hyperband optimization so not all hyperparameter combinations are tested and training runs were stopped early (Li et al., 2018).}
+    \caption{Results from hyperparameter search. The table shows the tested hyperparameters, the number of epochs the respective model was trained for and the masked binary accuracy (MBA) on both the training and validation data. Models are sorted by their MBA on the validation data. The best performing model is highlighted in bold. Note that the hyperparameter search was performed using hyperband optimization so not all hyperparameter combinations are tested and training runs were stopped early (Li et al., 2018).}
     \small
     \input{analysis_scripts/output/tex/hps_trials_table.tex}
 \end{table}
