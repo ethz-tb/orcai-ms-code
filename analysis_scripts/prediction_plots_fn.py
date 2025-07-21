@@ -98,7 +98,7 @@ class AnnotationPlotData:
     ):
         recording_path = Path(sampled_call.recording_path)
         probabilities_path = Path(sampled_call.recording_path).with_name(
-            f"{sampled_call.recording}_c1_orcai-v1_predicted_probabilities.csv.gz"
+            f"{sampled_call.recording}_c{sampled_call.channel}_orcai-v1_predicted_probabilities.csv.gz"
         )
         annotations_path = recording_path.with_suffix(".txt")
 
