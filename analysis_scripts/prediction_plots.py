@@ -63,7 +63,7 @@ for i, label in tqdm(enumerate(CALLS), total=len(CALLS), desc="Plotting"):
     )
     subfigure = figure.add_subfigure(gridspec[0, 0])
     subfigures = subfigure.subfigures(
-        N_PREDICTIONS, len(BINS_LABELS), hspace=0, wspace=0
+        len(BINS_LABELS), N_PREDICTIONS, hspace=0, wspace=0
     )
 
     for i, sampled_call in tqdm(
@@ -80,9 +80,9 @@ for i, label in tqdm(enumerate(CALLS), total=len(CALLS), desc="Plotting"):
             sample_extension_absolute=5,
             sample_extension_relative=0,
         )
-        col_index = sampled_call.mean_p_bin_index
-        row_index = sampled_call.sample_index
-        figure_title = BINS_LABELS[col_index] if row_index == 0 else None
+        row_index = sampled_call.mean_p_bin_index
+        col_index = sampled_call.sample_index
+        figure_title = f"Sample {col_index + 1}" if row_index == 0 else None
 
         draw_x_axis_label = i == (len(sampled_calls_label) - 1) or row_index == (
             N_PREDICTIONS - 1
@@ -101,7 +101,7 @@ for i, label in tqdm(enumerate(CALLS), total=len(CALLS), desc="Plotting"):
             subfigures[row_index, col_index].text(
                 -0.2,
                 0.5,
-                f"Sample {row_index + 1}",
+                BINS_LABELS[row_index],
                 ha="center",
                 va="center",
                 rotation="vertical",
