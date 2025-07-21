@@ -51,7 +51,6 @@ make-SI:
     latexmk -pdf analysis_scripts/SI.tex
     latexmk -c -pdf analysis_scripts/SI.tex
 
-
 start-fresh:
     rm -f analysis_scripts/output/tables/*.pdf
     rm -f analysis_scripts/output/csv/*.csv
