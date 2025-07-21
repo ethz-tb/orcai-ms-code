@@ -20,3 +20,17 @@ analysis_scripts/annotation_overlap.html
 
 # python cache
 __pycache__/
+
+# latex
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bcf
+*.run.xml
+SI.pdf
