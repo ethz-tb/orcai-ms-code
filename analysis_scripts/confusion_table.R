@@ -58,7 +58,6 @@ unfiltered_data_confusion <- read_csv(
     arrange(Label)
 
 confusion_table <- bind_rows(test_data_confusion, unfiltered_data_confusion) |>
-    select(-Set, -Total) |>
     mutate(
         Label = case_match(
             Label,
@@ -72,12 +71,20 @@ confusion_table <- bind_rows(test_data_confusion, unfiltered_data_confusion) |>
         )
     ) |>
     # make sure column order is correct
-    select(Label, TP, FN, FP, TN, PR, RE, F1)
+    select(Label, Set, TP, FN, FP, TN, PR, RE, F1)
 
-kbl(confusion_table,
-    format = "latex", digits = 4,
-    booktabs = TRUE
-) |>
-    pack_rows("filtered data", 1, 7) |>
-    pack_rows("unfiltered data", 8, 14) |>
+write_csv(
+    confusion_table |>
+        mutate(across(where(is.numeric), \(x) round(x, digits = 4))),
+    here("analysis_scripts", "output", "csv", "confusion_table.csv")
+)
+
+confusion_table |>
+    select(-Set) |>
+    kbl(
+        format = "latex", digits = 4,
+        booktabs = TRUE
+    ) |>
+    pack_rows("filtered dataset", 1, 7) |>
+    pack_rows("unfiltered dataset", 8, 14) |>
     write_lines(file = here("analysis_scripts", "output", "tex", "confusion_table.tex"))
