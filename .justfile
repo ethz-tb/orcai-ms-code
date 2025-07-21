@@ -1,5 +1,5 @@
 make-all:
-    just make-stats make-plots make-tables make-stats make-pdf-tables
+    just make-stats make-plots make-tables make-stats make-pdf-tables make-SI
 
 make-stats: extract-metrics
     Rscript analysis_scripts/training_time.R
@@ -43,9 +43,14 @@ make-prediction-plots: sample-predictions
     uv run python analysis_scripts/prediction_plots.py
 
 make-prediction-plots-pdf:
-    pdflatex -output-directory analysis_scripts/output/figures analysis_scripts/tex_intermediates/all_prediction_figures.tex
-    pdflatex -output-directory analysis_scripts/output/figures analysis_scripts/tex_intermediates/all_prediction_figures.tex
-    rm analysis_scripts/output/figures/all_prediction_figures.aux analysis_scripts/output/figures/all_prediction_figures.log
+    pdflatex -output-directory analysis_scripts/output/figures analysis_scripts/tex_intermediates/figuresSI_prediction_examples.tex
+    pdflatex -output-directory analysis_scripts/output/figures analysis_scripts/tex_intermediates/figuresSI_prediction_examples.tex
+    rm analysis_scripts/output/figures/figuresSI_prediction_examples.aux analysis_scripts/output/figures/figuresSI_prediction_examples.log
+
+make-SI:
+    latexmk -pdf analysis_scripts/SI.tex
+    latexmk -c -pdf analysis_scripts/SI.tex
+
 
 start-fresh:
     rm -f analysis_scripts/output/tables/*.pdf
