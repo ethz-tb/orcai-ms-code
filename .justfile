@@ -11,6 +11,7 @@ make-plots: extract-metrics
     Rscript analysis_scripts/hpsearch_plot.R
     uv run analysis_scripts/model_structure.py
     just make-prediction-plots
+    just make-prediction-plots-pdf
 
 make-tables: extract-metrics 
     Rscript analysis_scripts/snippet_durations_table.R
@@ -40,10 +41,13 @@ sample-predictions:
 
 make-prediction-plots: sample-predictions
     uv run python analysis_scripts/prediction_plots.py
+
+make-prediction-plots-pdf:
+    pdflatex -output-directory analysis_scripts/output/figures analysis_scripts/tex_intermediates/all_prediction_figures.tex
     pdflatex -output-directory analysis_scripts/output/figures analysis_scripts/tex_intermediates/all_prediction_figures.tex
     rm analysis_scripts/output/figures/all_prediction_figures.aux analysis_scripts/output/figures/all_prediction_figures.log
 
-fresh-start:
+start-fresh:
     rm -f analysis_scripts/output/tables/*.pdf
     rm -f analysis_scripts/output/csv/*.csv
     rm -f analysis_scripts/output/figures/*.png
