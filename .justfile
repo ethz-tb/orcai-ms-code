@@ -20,12 +20,14 @@ make-tables: extract-metrics
     Rscript analysis_scripts/hps_trials_table.R
 
 make-pdf-tables: make-tables
+    just render-table table2_annotation_duration
     just render-table table3_filtered_snippets_duration
     just render-table table4_confusion
     just render-table table5_misclassification_combined
     just render-table table5_misclassification_TP
     just render-table table6_misclassification_PT
-    just render-table tableSI1_hps_trials
+    just render-table tableS1_hps_trials
+    just render-table tableS2_annotation_duration_filter
     just render-table all_ms_tables
 
 render-table basename:
