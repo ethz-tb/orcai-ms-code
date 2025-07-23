@@ -83,23 +83,6 @@ mean_annotation_duration <- all_annotations |>
     ) |>
     select(-margin)
 
-all_annotations |>
-    ungroup() |>
-    mutate(
-        duration = stop - start
-    ) |>
-    group_by(
-        label
-    ) |>
-    ggplot(
-        mapping = aes(y = duration, x = label)
-    ) +
-    geom_violin(
-        bounds = c(0, Inf),
-        draw_quantiles = c(0.25, 0.5, 0.75)
-    ) +
-    theme_bw()
-
 kable(mean_annotation_duration, caption = "Duration of Annotations by Type", digits = 3)
 ```
 
