@@ -1,0 +1,24 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper, margin=1.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{caption}
+
+\DeclareCaptionFormat{custom}{\textbf{#1 #2 }#3}
+\DeclareCaptionLabelSeparator{custom}{--}
+\DeclareCaptionLabelFormat{custom}{#1 SI#2}
+\captionsetup{format=custom, labelsep=custom, labelformat=custom}
+
+\begin{document}
+\pagestyle{empty}
+\begin{table}[h]
+    \centering
+    \caption{Minimum and maximum duration of annotations by expert annotators and the chosen filters for prediciton of signals.}
+    \small
+    \input{analysis_scripts/output/tex/annotation_filter_duration.tex}
+\end{table}
+
+\end{document}

@@ -39,6 +39,7 @@
 \newpage
 
 \section{Supplementary Tables}
+
 \begin{table}[!ht]
     \caption{Results from hyperparameter search. The table shows the tested hyperparameters, the number of epochs the respective model was trained for and the masked binary accuracy (MBA) on both the training and validation data. Models are sorted by their MBA on the validation data. The best performing model is highlighted in bold. Note that the hyperparameter search was performed using hyperband optimization so not all hyperparameter combinations are tested and training runs were stopped early \parencite{hyperband2018}.}
     \begin{adjustwidth}{-.5in}{-.5in}
@@ -46,10 +47,18 @@
         \small
         \input{analysis_scripts/output/tex/hps_trials_table.tex}
     \end{adjustwidth}
-
 \end{table}
 
-\newpage
+\clearpage
+
+\begin{table}[!ht]
+    \centering
+    \caption{Minimum and maximum duration of annotations by expert annotators and the chosen filters for prediciton of signals.}
+    \small
+    \input{analysis_scripts/output/tex/annotation_filter_duration.tex}
+\end{table}
+
+\clearpage
 
 \section{Supplementary Figures}
 \newcommand{\ppCaption}[1]{Spectrograms and prediction probabilites for five
