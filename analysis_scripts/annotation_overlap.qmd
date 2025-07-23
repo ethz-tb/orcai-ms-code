@@ -27,6 +27,7 @@ library(here)
 library(glue)
 library(jsonlite)
 library(knitr)
+library(kableExtra)
 library(ivs)
 
 source(here("analysis_scripts/annotation_overlap_fns.R"))
@@ -79,11 +80,62 @@ mean_annotation_duration <- all_annotations |>
         se = sd / sqrt(ens),
         margin = qt(0.975, df = ens - 1) * se,
         ci95_lower = mean - margin,
-        ci95_upper = mean + margin
+        ci95_upper = mean + margin,
+        sum = sum(duration)
     ) |>
-    select(-margin)
+    select(-margin) |>
+    mutate(
+        label_abbr = label,
+        label = case_match(
+            label,
+            "BR" ~ "breathing",
+            "BUZZ" ~ "buzzing",
+            "HERDING" ~ "herding calls",
+            "PHS" ~ "prey handling sounds",
+            "SS" ~ "pulsed calls",
+            "TAILSLAP" ~ "tail slaps",
+            "WHISTLE" ~ "whistles",
+        ),
+        .before = "label"
+    )
 
 kable(mean_annotation_duration, caption = "Duration of Annotations by Type", digits = 3)
+
+annotation_filter_duration <- mean_annotation_duration |>
+    mutate(
+        min_filter = c(0.4, 0.05, 1.00, 0.1, 0.05, 0.05, 0.1),
+        max_filter = "Inf"
+    ) |>
+    select(
+        label_abbr, label, min, max, min_filter, max_filter
+    )
+
+annotation_filter_duration |>
+    kbl(
+        format = "latex", digits = 4,
+        booktabs = TRUE, linesep = "",
+        col.names = c("Label (Abbr.)", "Label", "min", "max", "min", "max")
+    ) |>
+    add_header_above(c(" " = 2, "obeserved duration [s]" = 2, "filtered duration [s]" = 2)) |>
+    write_lines(file = here("analysis_scripts", "output", "tex", "annotation_filter_duration.tex"))
+
+annotation_duration <- mean_annotation_duration |>
+    mutate(
+        total_duration = seconds_to_hhmmss(sum)
+    ) |>
+    select(
+        label, total_duration, ens
+    )
+
+annotation_duration |>
+    kbl(
+        format = "latex", digits = 4,
+        booktabs = TRUE, linesep = "",
+        col.names = c("Accoustic Signal", "Total duration", "Number")
+    ) |>
+    write_lines(file = here("analysis_scripts", "output", "tex", "annotation_duration.tex"))
+
+
 ```
 
 ```{r}
@@ -114,11 +166,11 @@ kable(mean_prediction_duration, caption = "Duration of Predictions by Type", dig
 # Overlaps
 ```{r}
 #| label: count overlaps
-#| cache: true
 all_annotations_overlaps <- all_annotations |>
     group_by(recording) |>
     arrange(start, .by_group = TRUE) |>
     mutate(
+        id = glue("{recording}_{seq_len(n())}"),
         count_overlaps(start, stop)
     )
 write_csv(
@@ -131,6 +183,7 @@ all_predictions_overlaps <- all_predictions |>
     group_by(recording) |>
     arrange(start, .by_group = TRUE) |>
     mutate(
+        id = glue("{recording}_{seq_len(n())}"),
         count_overlaps(start, stop)
     )
 write_csv(
@@ -263,5 +316,103 @@ ggplot(
     geom_histogram(binwidth = 1) +
     labs(x = "total duration with overlap [s]") +
     theme_bw()
+```
+
+## prediction of overlaps
+
+```{r}
+#| label: prediction of overlaps
+
+recordings_with_annotations <- unique(all_annotations_overlaps$recording)
+predicted_annotations_list <- list()
+
+for (i in seq_along(recordings_with_annotations)) {
+    i_recording <- recordings_with_annotations[i]
+    i_annotations <- filter(all_annotations_overlaps, recording == i_recording) |>
+        mutate(iv = iv(start, stop))
+    i_predictions <- filter(all_predictions_overlaps, recording == i_recording) |>
+        mutate(iv = iv(start, stop))
+
+    i_locations <- iv_locate_overlaps(i_annotations$iv, i_predictions$iv)
+
+    locations_i_annotations <- i_annotations[i_locations$needles, ] |>
+        ungroup() |>
+        select(
+            recording,
+            annotation_id = id,
+            annotation_start = start, annotation_stop = stop,
+            annotation_label = label,
+            annotation_overlaps_with = overlaps_with
+        )
+    locations_i_predictions <- i_predictions[i_locations$haystack, ] |>
+        ungroup() |>
+        select(
+            prediction_id = id,
+            prediction_start = start, prediction_stop = stop,
+            prediction_label = label,
+            prediction_overlaps_with = overlaps_with
+        )
+
+    # check if any of the overlapping prediction is true, only return those
+    predicted_annotations_list[[i]] <- bind_cols(locations_i_annotations, locations_i_predictions) |>
+        group_by(annotation_id) |>
+        group_modify(
+            resolve_multiple_overlaps
+        )
+}
+
+predicted_annotations <- bind_rows(predicted_annotations_list)
+
+prediction_of_annotations <- predicted_annotations |>
+    ungroup() |>
+    summarise(
+        correct_prediction = sum(prediction_correct, na.rm = TRUE),
+        incorrect_prediction = sum(!prediction_correct, na.rm = TRUE),
+        no_prediction = sum(is.na(prediction_correct))
+    ) |>
+    pivot_longer(cols = everything(), values_to = "predictions", names_to = "n") |>
+    mutate(total = sum(predictions), p = predictions / sum(predictions), pc = p * 100)
+
+prediction_of_annotations |>
+    kable(caption = "Number & proportion of annotations that were predicted")
+
+prediction_of_annotations_without_overlaps <- predicted_annotations |>
+    ungroup() |>
+    filter(annotation_overlaps_with == "") |>
+    summarise(
+        correct_prediction = sum(prediction_correct, na.rm = TRUE),
+        incorrect_prediction = sum(!prediction_correct, na.rm = TRUE),
+        no_prediction = sum(is.na(prediction_correct))
+    ) |>
+    pivot_longer(cols = everything(), values_to = "predictions", names_to = "n") |>
+    mutate(total = sum(predictions), p = predictions / sum(predictions), pc = p * 100)
+
+prediction_of_annotations_without_overlaps |>
+    kable(caption = "Number & proportion of annotations without overlap that were predicted")
+
+
+prediction_of_annotations_with_overlaps <- predicted_annotations |>
+    ungroup() |>
+    filter(annotation_overlaps_with != "") |>
+    summarise(
+        correct_prediction = sum(prediction_correct, na.rm = TRUE),
+        incorrect_prediction = sum(!prediction_correct, na.rm = TRUE),
+        no_prediction = sum(is.na(prediction_correct))
+    ) |>
+    pivot_longer(cols = everything(), values_to = "predictions", names_to = "n") |>
+    mutate(total = sum(predictions), p = predictions / sum(predictions), pc = p * 100)
+
+prediction_of_annotations_with_overlaps |>
+    kable(caption = "Number & proportion of annotations that have overlaps that were predicted")
+
+
+
+write_csv(
+    predicted_annotations,
+    here("analysis_scripts", "output", "csv", "predicted_annotations.csv")
+)
+
+
+
 ```
 

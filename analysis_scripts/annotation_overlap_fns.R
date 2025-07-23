@@ -131,3 +131,30 @@ test_set |>
         count_overlaps(start, stop)
     )
 recording_overlap_duration(test_set$start, test_set$stop)
+
+seconds_to_hhmmss <- function(sec) {
+    h <- sec %/% 3600
+    m <- (sec %% 3600) %/% 60
+    s <- round(sec %% 60, 0)
+    str <- sprintf("%02d:%02d:%02d", h, m, s)
+    return(str)
+}
+
+resolve_multiple_overlaps <- function(df, grouping) {
+    df <- df |> mutate(prediction_correct = prediction_label == annotation_label)
+    if (dim(df)[1] == 1) {
+        # if there is only one return it add if it is correct
+        return(df)
+    } else {
+        # if there is more than one overlap check if any are correct and return the first
+        df_correct <- df |>
+            filter(prediction_correct) |>
+            first()
+        if (dim(df_correct)[1] < 1) {
+            # if none are correct, return the first incorrect
+            return(df |> first())
+        } else {
+            return(df_correct)
+        }
+    }
+}
