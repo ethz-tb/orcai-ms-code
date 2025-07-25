@@ -28,6 +28,7 @@ make-pdf-tables: make-tables
     just render-table table6_misclassification_PT
     just render-table tableS1_hps_trials
     just render-table tableS2_annotation_duration_filter
+    just render-table tableS3_annotation_prediction_overlap
     just render-table all_ms_tables
 
 render-table basename:

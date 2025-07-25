@@ -2,6 +2,7 @@
 \usepackage[a4paper, portrait, margin=2.5cm]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage{booktabs}
+\usepackage{makecell}
 \usepackage{tabularx}
 \usepackage{multirow}
 \usepackage{graphicx}
@@ -53,9 +54,22 @@
 
 \begin{table}[!ht]
     \centering
-    \caption{Minimum and maximum duration of annotations by expert annotators and the chosen filters for prediciton of signals.}
+    \caption{Minimum and maximum duration of annotations by expert annotators
+        and the chosen filters for prediciton of signals.}
     \small
     \input{analysis_scripts/output/tex/annotation_filter_duration.tex}
+\end{table}
+
+\clearpage
+
+\begin{table}[!ht]
+    \centering
+    \caption{Number of correct, incorrect, and missing predictions (not detected)
+        of all annotations in the overall dataset (n = 28648), the subset of annotations
+        that do not overlap with any other annotation (n = 24350) and the subset of
+        annotations that overlap with at least one other annotation (n = 4262).}
+    \small
+    \input{analysis_scripts/output/tex/annotation_prediction_overlap.tex}
 \end{table}
 
 \clearpage

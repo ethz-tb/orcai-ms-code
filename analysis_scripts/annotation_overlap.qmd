@@ -370,8 +370,8 @@ prediction_of_annotations <- predicted_annotations |>
         incorrect_prediction = sum(!prediction_correct, na.rm = TRUE),
         no_prediction = sum(is.na(prediction_correct))
     ) |>
-    pivot_longer(cols = everything(), values_to = "predictions", names_to = "n") |>
-    mutate(total = sum(predictions), p = predictions / sum(predictions), pc = p * 100)
+    pivot_longer(cols = everything(), values_to = "n", names_to = "prediction") |>
+    mutate(total = sum(n), p = n / sum(n), pc = p * 100)
 
 prediction_of_annotations |>
     kable(caption = "Number & proportion of annotations that were predicted")
@@ -384,8 +384,8 @@ prediction_of_annotations_without_overlaps <- predicted_annotations |>
         incorrect_prediction = sum(!prediction_correct, na.rm = TRUE),
         no_prediction = sum(is.na(prediction_correct))
     ) |>
-    pivot_longer(cols = everything(), values_to = "predictions", names_to = "n") |>
-    mutate(total = sum(predictions), p = predictions / sum(predictions), pc = p * 100)
+    pivot_longer(cols = everything(), values_to = "n", names_to = "prediction") |>
+    mutate(total = sum(n), p = n / sum(n), pc = p * 100)
 
 prediction_of_annotations_without_overlaps |>
     kable(caption = "Number & proportion of annotations without overlap that were predicted")
@@ -399,12 +399,45 @@ prediction_of_annotations_with_overlaps <- predicted_annotations |>
         incorrect_prediction = sum(!prediction_correct, na.rm = TRUE),
         no_prediction = sum(is.na(prediction_correct))
     ) |>
-    pivot_longer(cols = everything(), values_to = "predictions", names_to = "n") |>
-    mutate(total = sum(predictions), p = predictions / sum(predictions), pc = p * 100)
+    pivot_longer(cols = everything(), values_to = "n", names_to = "prediction") |>
+    mutate(total = sum(n), p = n / sum(n), pc = p * 100)
 
 prediction_of_annotations_with_overlaps |>
     kable(caption = "Number & proportion of annotations that have overlaps that were predicted")
 
+prediction_of_annotations |>
+    transmute(
+        prediction = case_match(
+            prediction,
+            "correct_prediction" ~ "correct",
+            "incorrect_prediction" ~ "incorrect",
+            "no_prediction" ~ "not detected"
+        ),
+        n,
+        pc
+    ) |>
+    bind_cols(
+        prediction_of_annotations_without_overlaps |>
+            select(n, pc)
+    ) |>
+    bind_cols(
+        prediction_of_annotations_with_overlaps |>
+            select(n, pc)
+    ) |>
+    kbl(
+        format = "latex", digits = 2,
+        booktabs = TRUE, linesep = "",
+        col.names = c("prediction", "n", "%", "n", "%", "n", "%")
+    ) |>
+    add_header_above(
+        c(
+            " " = 1,
+            "overall\n(n=28648)" = 2, # n = prediction_of_annotations$total[1]
+            "without overlaps\n(n=24350)" = 2, # n = prediction_of_annotations_without_overlaps$total[1]
+            "with overlap\n(n=4262)" = 2 # n = prediction_of_annotations_with_overlaps$total[1]
+        )
+    ) |>
+    write_lines(file = here("analysis_scripts", "output", "tex", "annotation_prediction_overlap.tex"))
 
 
 write_csv(

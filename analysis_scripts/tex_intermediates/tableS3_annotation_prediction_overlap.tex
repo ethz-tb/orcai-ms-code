@@ -1,0 +1,28 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper, margin=1.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{graphicx}
+\usepackage{caption}
+
+\DeclareCaptionFormat{custom}{\textbf{#1 #2 }#3}
+\DeclareCaptionLabelSeparator{custom}{--}
+\DeclareCaptionLabelFormat{custom}{#1 S#2}
+\captionsetup{format=custom, labelsep=custom, labelformat=custom}
+
+\begin{document}
+\pagestyle{empty}
+\begin{table}[h]
+    \centering
+    \caption{Number of correct, incorrect, and missing predictions (not detected)
+        of all annotations in the overall dataset (n = 28648), the subset of annotations
+        that do not overlap with any other annotation (n = 24350) and the subset of
+        annotations that overlap with at least one other annotation (n = 4262).}
+    \small
+    \input{analysis_scripts/output/tex/annotation_prediction_overlap.tex}
+\end{table}
+
+\end{document}
