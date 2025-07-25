@@ -253,7 +253,7 @@ Run on ETHZ Euler cluster with GPU. Using scripts in [model_training_scripts](mo
 bash setup_env.sh
 
 # submit job
-sbatch train_al_v1.sh
+sbatch train_all_v1.sh
 ```
 
 log output is in e.g. [trained_models/orcai-v1_1/logs/training_output.log](trained_models/orcai-v1_1/logs/training_output.log)
