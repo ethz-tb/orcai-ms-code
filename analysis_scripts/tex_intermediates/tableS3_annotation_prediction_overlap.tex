@@ -17,10 +17,19 @@
 \pagestyle{empty}
 \begin{table}[h]
     \centering
-    \caption{Number of correct, incorrect, and missing predictions (not detected)
-        of all annotations in the overall dataset (n = 28648), the subset of annotations
-        that do not overlap with any other annotation (n = 24350) and the subset of
-        annotations that overlap with at least one other annotation (n = 4262).}
+    \caption{Number of correct, incorrect, and missing predictions when the final
+        trained model is used to predict calls in all recordings used in this study.
+        We scored predictions as
+        \emph{correct} if there was prediction of the same signal type overlapping
+        the original annotation and
+        \emph{incorrect} if the prediction was of a different signal type.
+        If there was no prediction overlapping an original annotation it was
+        scored as \emph{not detected}.
+        The table shows \emph{correct}, \emph{incorrect} and missing predictions
+        (\emph{not detected}) for all annotations in the overall dataset (n = 28648),
+        the subset of original annotations that do not overlap with any other
+        original annotation (n = 24350) and the subset of original annotations
+        that overlap with at least one other original annotation (n = 4262).}
     \small
     \input{analysis_scripts/output/tex/annotation_prediction_overlap.tex}
 \end{table}
