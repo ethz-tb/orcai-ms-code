@@ -5,11 +5,13 @@
 \usepackage{tabularx}
 \usepackage{multirow}
 \usepackage{graphicx}
+\usepackage{caption}
 
 \begin{document}
 
 \begin{table}[h]
     \centering
+    \caption*{\textbf{Table 4:} Fraction of true positives (TP), false negatives (FN), false positives (FP), true negatives (TN), as well as precision (PR), recall (RE) and F1 score (F1) for each of the seven acoustic labels for the test data. These values were computed for two types of datasets: The filtered dataset was enriched for snippets that contain labels by removing 99\% of snippets without any labels (see Methods). The unfiltered dataset represents a larger dataset of snippets with the frequency as they occur in the data, i.e. without removal of snippets without labels.}
     \small
     \input{analysis_scripts/output/tex/confusion_table.tex}
 \end{table}

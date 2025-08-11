@@ -5,11 +5,13 @@
 \usepackage{tabularx}
 \usepackage{multirow}
 \usepackage{graphicx}
+\usepackage{caption}
 
 \begin{document}
 
 \begin{table}[h]
     \centering
+    \caption*{\textbf{Table 3:} Duration (hh:mm:ss) of different acoustic signals in the filtered data used for training, validation, and testing after random extraction of paired snippets of spectrograms and labels.}
     \small
     \input{analysis_scripts/output/tex/filtered_snippets_duration.tex}
 \end{table}

@@ -5,11 +5,13 @@
 \usepackage{tabularx}
 \usepackage{multirow}
 \usepackage{graphicx}
+\usepackage{caption}
 
 \begin{document}
 
 \begin{table}[h]
     \centering
+    \caption*{\textbf{Table 6:} Conditional probabilities of misclassification of predicted signals. The table shows the probability of the signal to be annotated given the prediction. “None” denotes that no signal was predicted or annotated. The column “fraction time” denotes the fraction of time steps in which the given signal was predicted.}
     \small
     \input{analysis_scripts/output/tex/mc_table_PT.tex}
 \end{table}
