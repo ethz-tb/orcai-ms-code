@@ -22,7 +22,7 @@ rng = np.random.default_rng(seed=221213288706888228578119251711734307995)
 
 # load recording table
 recording_table = pd.read_csv(
-    "/Volumes/4TB/orcai_project/orca_recordings/recording_table_orcai.csv",
+    "/Volumes/4TB/orcai_project/orca_recordings/recording_table_ISL.csv",
     dtype={
         "recording": str,
         "base_dir_recording": str,
@@ -34,7 +34,7 @@ recording_table["recording_path"] = recording_table.apply(
     lambda row: Path(row["base_dir_recording"], row["rel_recording_path"]), axis=1
 )
 recording_type = pd.read_csv(
-    "/Volumes/4TB/orcai_project/orca_recordings/original_recording_table.csv",
+    "/Volumes/4TB/orcai_project/orca_recordings/original_recording_table_ISL.csv",
     usecols=["recording", "recording_type"],
 ).set_index("recording")
 

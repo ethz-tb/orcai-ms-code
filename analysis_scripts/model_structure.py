@@ -2,12 +2,12 @@ from pathlib import Path
 
 import keras
 
-from orcAI.architectures import (
+from orcai.architectures import (
     MaskedBinaryAccuracy,
     MaskedBinaryCrossentropy,
     build_model,
 )
-from orcAI.io import read_json
+from orcai.io import read_json
 
 model_paths = {
     "1DC": Path("trained_models/orcai-v1-3750-1DC_1"),

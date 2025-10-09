@@ -7,8 +7,8 @@ import pandas as pd
 from librosa import load
 from matplotlib.figure import Figure
 from matplotlib.lines import Line2D
-from orcAI.io import read_annotation_file
-from orcAI.spectrogram import calculate_spectrogram, preprocess_spectrogram
+from orcai.io import read_annotation_file
+from orcai.spectrogram import calculate_spectrogram, preprocess_spectrogram
 
 CALLS = ["BR", "BUZZ", "HERDING", "PHS", "SS", "TAILSLAP", "WHISTLE"]
 CALL_COLORS = dict(
