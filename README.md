@@ -19,6 +19,7 @@ Bonhoeffer, S. et al. 2025. “orcAI: A Machine Learning Tool to Detect and Clas
   note = {e70083 9425791},
   abstract = {ABSTRACT Acoustic monitoring is an essential tool for investigating animal communication and behavior when visual contact is limited, but the scalability of bioacoustic projects is often limited by time-intensive manual auditing of focal signals. To address this bottleneck, we introduce orcAI—a novel deep learning framework for the automated detection and classification of a broad acoustic repertoire of killer whales (Orcinus orca), including vocalizations (e.g., pulsed calls, whistles) and incidental sounds (e.g., breathing, tail slaps). orcAI combines a ResNet-based Convolutional Neural Network (ResNet-CNN) with Long Short-Term Memory (LSTM) layers to capture both spatial features and temporal context, enabling the model to classify signals and to accurately determine their temporal boundaries in spectrograms. Trained on a comprehensive dataset from herring-feeding killer whales off Iceland, the framework was designed to be adaptable to other populations upon training with equivalent data. Our final model achieves up to 98.2\% accuracy on test data and is delivered as an open-source tool with an easy-to-use command-line interface. By providing a ready-to-use model that processes raw audio and outputs annotations, orcAI serves as a useful tool for advancing the study of killer whale vocal behavior and, more broadly, for understanding marine mammal communication and ecology.}
 }
+```
 
 ## Contents
 
